@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 
 use strum_macros::Display;
-use web_sys::MouseEvent;
+use web_sys::{Element, MouseEvent};
 use yew::{
-    html,
-    virtual_dom::{AttrValue, Attributes, VNode},
-    Callback, Children, Component, Context, Html, NodeRef, Properties,
+    html, virtual_dom::VNode, Callback, Children, Component, Context, Html, NodeRef, Properties,
 };
 
 /// A wrapper around ClayButton. Note that only text is an acceptible child component.
@@ -43,10 +41,23 @@ pub struct ButtonProps {
     pub _type: String,
     /// Arbitrary props that will be passed down to the underlying component.
     #[prop_or_default]
-    pub misc_attrs: Attributes,
+    pub misc_attrs: HashMap<String, Option<String>>,
     #[prop_or_default]
     pub node_ref: NodeRef,
 }
+
+#[derive(PartialEq)]
+struct MiscAttrs(HashMap<String, String>);
+
+impl Properties for MiscAttrs {
+    type Builder = AttrBuilder;
+
+    fn builder() -> Self::Builder {
+        AttrBuilder {}
+    }
+}
+
+struct AttrBuilder {}
 
 impl Component for ClayButton {
     type Message = Msg;
@@ -54,7 +65,7 @@ impl Component for ClayButton {
 
     fn create(ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref,
+            node_ref: NodeRef::default(),
         }
     }
 
@@ -76,42 +87,35 @@ impl Component for ClayButton {
             panic!("Clay Button only accepts a single text node as a child");
         };
 
-        let text = match children.first() {
-            Some(VNode::VText(text_node)) => text_node.text.to_string(),
-            _ => panic!("A non-text node was passed as a child to ClayButton"),
-        };
-
-        let mut classes = vec!["btn"];
+        let mut classes: Vec<String> = vec!["btn".into()];
 
         if props.alert {
-            classes.push("alert-btn");
+            classes.push("alert-btn".into());
         }
 
         if props.block {
-            classes.push("btn-block");
+            classes.push("btn-block".into());
         }
 
         if props.monospaced {
-            classes.push("btn-monospaced");
+            classes.push("btn-monospaced".into());
         }
 
         if props.borderless {
-            classes.push("btn-outline-borderless");
+            classes.push("btn-outline-borderless".into());
         }
 
         if props.small {
-            classes.push("btn-sm");
+            classes.push("btn-sm".into());
         }
 
         if !props.outline && !props.borderless {
-            classes.push(&format!("btn-{}", props.display_type.to_string()));
+            classes.push(format!("btn-{}", props.display_type.to_string()));
         }
 
         if props.outline || props.borderless {
-            classes.push(&format!("btn-outline-{}", props.display_type.to_string()));
+            classes.push(format!("btn-outline-{}", props.display_type.to_string()));
         }
-
-        let attrs = props.misc_attrs;
 
         html! {
             <button
@@ -122,6 +126,18 @@ impl Component for ClayButton {
         >
             {props.children}
         </button>
+        }
+    }
+
+    fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
+        if first_render {
+            let misc_attrs = ctx.props().misc_attrs.clone();
+            let elem = self.node_ref.cast::<Element>().unwrap();
+
+            for (key, maybe_val) in &misc_attrs {
+                let val = maybe_val.clone().unwrap_or("".to_string());
+                elem.set_attribute(key, &val).unwrap();
+            }
         }
     }
 }

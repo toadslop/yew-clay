@@ -66,7 +66,7 @@ impl Component for Group {
                     match node {
                         VNode::VTag(_) => panic!(),
                         VNode::VText(_) => panic!(),
-                        VNode::VComp(comp) => comp.,
+                        // VNode::VComp(comp) => comp.,
                         VNode::VList(_) => panic!(),
                         VNode::VPortal(_) => panic!(),
                         VNode::VRef(node) => nodes.push(node.clone()),
