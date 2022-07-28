@@ -1,17 +1,20 @@
 use std::collections::HashMap;
+
 use strum_macros::Display;
-use wasm_bindgen::{
-    prelude::{wasm_bindgen, Closure},
-    JsValue,
+use web_sys::MouseEvent;
+use yew::{
+    html,
+    virtual_dom::{AttrValue, Attributes, VNode},
+    Callback, Children, Component, Context, Html, NodeRef, Properties,
 };
-use web_sys::Node;
-use yew::{prelude::*, virtual_dom::VNode};
 
 /// A wrapper around ClayButton. Note that only text is an acceptible child component.
 pub struct ClayButton {
-    node: Node,
-    #[allow(dead_code)]
-    props: ButtonProps,
+    node_ref: NodeRef,
+}
+
+pub enum Msg {
+    Clicked(MouseEvent),
 }
 
 /// Props for ClayButton. For details, check the docs:
@@ -35,30 +38,33 @@ pub struct ButtonProps {
     #[prop_or_default]
     pub children: Children,
     #[prop_or_default]
-    pub onclick: Callback<()>,
+    pub onclick: Callback<MouseEvent>,
+    #[prop_or("button".to_string())]
+    pub _type: String,
     /// Arbitrary props that will be passed down to the underlying component.
     #[prop_or_default]
-    pub misc_attrs: HashMap<String, String>,
+    pub misc_attrs: Attributes,
+    #[prop_or_default]
+    pub node_ref: NodeRef,
 }
 
 impl Component for ClayButton {
-    type Message = ();
+    type Message = Msg;
     type Properties = ButtonProps;
 
     fn create(ctx: &Context<Self>) -> Self {
-        let props = ctx.props().to_owned();
-
-        ClayButton {
-            node: Node::from(
-                web_sys::window()
-                    .unwrap()
-                    .document()
-                    .unwrap()
-                    .create_element("div")
-                    .unwrap(),
-            ),
-            props,
+        Self {
+            node_ref: ctx.props().node_ref,
         }
+    }
+
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            Msg::Clicked(ev) => {
+                ctx.props().onclick.emit(ev);
+            }
+        }
+        false
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -75,22 +81,48 @@ impl Component for ClayButton {
             _ => panic!("A non-text node was passed as a child to ClayButton"),
         };
 
-        let cb: Closure<dyn Fn() -> ()> = Closure::new(move || props.onclick.emit(()));
+        let mut classes = vec!["btn"];
 
-        render_clay_ui_button(
-            &self.node,
-            props.alert,
-            props.borderless,
-            props.block,
-            props.display_type.to_string(),
-            props.monospaced,
-            props.outline,
-            props.small,
-            text,
-            Closure::into_js_value(cb),
-            JsValue::from_serde(&props.misc_attrs).unwrap(),
-        );
-        VNode::VRef(self.node.clone())
+        if props.alert {
+            classes.push("alert-btn");
+        }
+
+        if props.block {
+            classes.push("btn-block");
+        }
+
+        if props.monospaced {
+            classes.push("btn-monospaced");
+        }
+
+        if props.borderless {
+            classes.push("btn-outline-borderless");
+        }
+
+        if props.small {
+            classes.push("btn-sm");
+        }
+
+        if !props.outline && !props.borderless {
+            classes.push(&format!("btn-{}", props.display_type.to_string()));
+        }
+
+        if props.outline || props.borderless {
+            classes.push(&format!("btn-outline-{}", props.display_type.to_string()));
+        }
+
+        let attrs = props.misc_attrs;
+
+        html! {
+            <button
+                class={classes.join(" ")}
+            ref={self.node_ref.clone()}
+            type={props._type}
+
+        >
+            {props.children}
+        </button>
+        }
     }
 }
 
@@ -113,22 +145,4 @@ pub enum DisplayType {
     Info,
     #[strum(serialize = "unstyled")]
     Unstyled,
-}
-
-#[wasm_bindgen(module = "/src/build/index.js")]
-extern "C" {
-    #[wasm_bindgen(js_name = "render_clay_button")]
-    fn render_clay_ui_button(
-        node: &Node,
-        alert: bool,
-        borderless: bool,
-        block: bool,
-        displayType: String,
-        monospaced: bool,
-        outline: bool,
-        small: bool,
-        text: String,
-        onClick: JsValue,
-        miscAttrs: JsValue,
-    );
 }

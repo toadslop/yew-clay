@@ -859,6 +859,10 @@ function render_clay_button(node, alert, borderless, block, displayType, monospa
     var element = React.createElement(ClayButton, __assign({ alert: alert, borderless: borderless, block: block, displayType: displayType, monospaced: monospaced, outline: outline, small: small, children: children, onClick: onClick }, miscAttrs));
     ReactDOM.render(element, node);
 }
+function render_clay_button_group(node, spaced, vertical, role, miscAttrs) {
+    var element = React.createElement(ClayButton.Group, __assign({ spaced: spaced, vertical: vertical, role: role }, miscAttrs));
+    ReactDOM.render(element, node);
+}
 
-export { render_clay_button };
+export { render_clay_button, render_clay_button_group };
 //# sourceMappingURL=index.js.map

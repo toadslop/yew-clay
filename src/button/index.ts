@@ -30,3 +30,21 @@ export function render_clay_button(
   });
   ReactDOM.render(element, node);
 }
+
+export function render_clay_button_group(
+  node: Element,
+  spaced: boolean,
+  vertical: boolean,
+  role: string,
+  children: React.ReactNode,
+  miscAttrs: {}
+) {
+  const element = React.createElement(ClayButton.Group, {
+    spaced,
+    vertical,
+    role,
+    children,
+    ...miscAttrs,
+  });
+  ReactDOM.render(element, node);
+}
