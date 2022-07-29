@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use web_sys::Element;
+use web_sys::{console, Element};
 use yew::NodeRef;
 
 #[cfg(feature = "button")]
@@ -32,11 +32,14 @@ impl MiscAttrs {
     /// Call the render method within the rendered method of a component, passing in the NodeRef of the component.
     /// This will then inject the props.
     pub fn render(&self, node_ref: &NodeRef) {
-        let elem = node_ref.cast::<Element>().unwrap();
-
-        for (key, maybe_val) in &self.0 {
-            let val = maybe_val.clone().unwrap_or("".to_string());
-            elem.set_attribute(&key, &val).unwrap();
+        if let Some(elem) = node_ref.cast::<Element>() {
+            for (key, maybe_val) in &self.0 {
+                let val = maybe_val.clone().unwrap_or("".to_string());
+                match elem.set_attribute(&key, &val) {
+                    Ok(()) => (),
+                    Err(_msg) => console::log_1(&"Failed to set attribute".into()),
+                }
+            }
         }
     }
 }

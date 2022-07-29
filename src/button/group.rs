@@ -1,19 +1,12 @@
-use std::collections::HashMap;
-use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
-use web_sys::Node;
-use yew::{
-    html::IntoPropValue,
-    prelude::*,
-    virtual_dom::{VChild, VNode},
-};
+use yew::prelude::*;
+
+use crate::MiscAttrs;
 
 use super::button::ClayButton;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
 pub struct Group {
-    node: Node,
-    #[allow(dead_code)]
-    props: GroupProps,
+    node_ref: NodeRef,
 }
 
 /// Props for ClayButton. For details, check the docs:
@@ -24,13 +17,17 @@ pub struct GroupProps {
     pub spaced: bool,
     #[prop_or(false)]
     pub vertical: bool,
-    #[prop_or_default]
+    #[prop_or("group".into())]
     pub role: String,
     #[prop_or_default]
     pub children: ChildrenWithProps<ClayButton>,
+    #[prop_or_default]
+    pub class: String,
     /// Arbitrary props that will be passed down to the underlying component.
     #[prop_or_default]
-    pub misc_attrs: HashMap<String, String>,
+    pub misc_attrs: MiscAttrs,
+    #[prop_or_default]
+    pub node_ref: NodeRef,
 }
 
 impl Component for Group {
@@ -38,66 +35,41 @@ impl Component for Group {
     type Properties = GroupProps;
 
     fn create(ctx: &Context<Self>) -> Self {
-        let props = ctx.props().to_owned();
-
-        Group {
-            node: Node::from(
-                web_sys::window()
-                    .unwrap()
-                    .document()
-                    .unwrap()
-                    .create_element("div")
-                    .unwrap(),
-            ),
-            props,
+        Self {
+            node_ref: ctx.props().node_ref.clone(),
         }
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
-        let children = html! {for props.children.iter()};
-        let thingy = match children {
-            VNode::VTag(tag) => panic!(),
-            VNode::VText(text) => panic!(),
-            VNode::VComp(comp) => panic!(),
-            VNode::VList(list) => {
-                let mut nodes = Vec::new();
-                for node in list.iter() {
-                    match node {
-                        VNode::VTag(_) => panic!(),
-                        VNode::VText(_) => panic!(),
-                        // VNode::VComp(comp) => comp.,
-                        VNode::VList(_) => panic!(),
-                        VNode::VPortal(_) => panic!(),
-                        VNode::VRef(node) => nodes.push(node.clone()),
-                    }
-                }
-                nodes
-            }
-            VNode::VPortal(portal) => panic!(),
-            VNode::VRef(refer) => vec![refer],
-        };
-        render_clay_button_group(
-            &self.node,
-            props.spaced,
-            props.vertical,
-            props.role,
-            thingy,
-            JsValue::from_serde(&props.misc_attrs).unwrap(),
-        );
-        VNode::VRef(self.node.clone())
+    fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
+        ctx.props().misc_attrs.render(&self.node_ref);
     }
-}
 
-#[wasm_bindgen(module = "/src/build/index.js")]
-extern "C" {
-    #[wasm_bindgen(js_name = "render_clay_button_group")]
-    fn render_clay_button_group(
-        node: &Node,
-        spaced: bool,
-        vertical: bool,
-        role: String,
-        chidlren: Vec<Node>,
-        miscAttrs: JsValue,
-    );
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let props = ctx.props();
+        let mut class = vec![props.class.clone()];
+
+        if props.vertical {
+            class.push("btn-group-vertical".into());
+        } else {
+            class.push("btn-group".into());
+        }
+
+        let children = props.children.clone();
+
+        html! {
+            <div
+                class={class.join(" ")}
+                role={props.role.clone()}
+            >
+            { if props.spaced {
+                children.into_iter().enumerate().map(|(key, child)| {
+                    html!{<div class={"btn-group-item"} key={key}>{child}</div>}
+                }).collect::<Html>()
+            } else {
+                children.into_iter().collect::<Html>()
+            }}
+            </div>
+
+        }
+    }
 }
