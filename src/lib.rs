@@ -6,6 +6,9 @@ use yew::NodeRef;
 #[cfg(feature = "button")]
 pub mod button;
 
+#[cfg(feature = "icon")]
+pub mod icon;
+
 /// A struct representing an artibrary set of HTML attributes to be passed to the underlying component.
 /// Should be used as a prop for a Yew component.
 #[derive(Debug, PartialEq, Clone, Default)]
