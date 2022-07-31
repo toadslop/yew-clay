@@ -1,6 +1,6 @@
 use yew::{html, Component, Context, Html, NodeRef, Properties};
-
-use crate::MiscAttrs;
+use yew_dom_attributes::attribute_collection::AttributeCollection;
+use yew_dom_attributes::misc_attributes::MiscAttrs;
 
 /// A Yew implementation of ClayIcon.
 pub struct ClayIcon {
@@ -65,6 +65,6 @@ impl Component for ClayIcon {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        ctx.props().misc_attrs.render(&self.node_ref);
+        ctx.props().misc_attrs.inject(&self.node_ref);
     }
 }

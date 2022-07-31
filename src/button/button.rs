@@ -1,10 +1,13 @@
 use strum_macros::Display;
 use web_sys::MouseEvent;
+use yew::virtual_dom::Attributes;
 use yew::{
     html, virtual_dom::VNode, Callback, Children, Component, Context, Html, NodeRef, Properties,
 };
-
-use crate::MiscAttrs;
+use yew_dom_attributes::aria_attributes::AriaAttributes;
+use yew_dom_attributes::attribute_collection::AttributeCollection;
+use yew_dom_attributes::dom_attributes::DOMAttributes;
+use yew_dom_attributes::misc_attributes::MiscAttrs;
 
 /// A Yew implementation of ClayButton.
 pub struct ClayButton {
@@ -37,8 +40,6 @@ pub struct ButtonProps {
     pub small: bool,
     #[prop_or_default]
     pub children: Children,
-    #[prop_or_default]
-    pub onclick: Callback<MouseEvent>,
     #[prop_or("button".to_string())]
     pub _type: String,
     /// Arbitrary props that will be passed down to the underlying component.
@@ -47,6 +48,10 @@ pub struct ButtonProps {
     pub misc_attrs: MiscAttrs,
     #[prop_or_default]
     pub node_ref: NodeRef,
+    #[prop_or_default]
+    pub aria: Option<AriaAttributes>,
+    #[prop_or_default]
+    pub dom_attrs: Option<DOMAttributes>,
 }
 
 impl ClayButton {
@@ -98,7 +103,7 @@ impl Component for ClayButton {
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::Clicked(ev) => {
-                ctx.props().onclick.emit(ev);
+                // ctx.props().onclick.emit(ev);
             }
         }
         false
@@ -115,22 +120,34 @@ impl Component for ClayButton {
 
         let classes = self.get_classes(&props);
 
-        let onclick = ctx.link().callback(|ev| Msg::Clicked(ev));
+        // let onclick = ctx.link().callback(|ev| Msg::Clicked(ev));
 
         html! {
+
             <button
                 class={classes}
                 disabled={ctx.props().disabled}
                 ref={self.node_ref.clone()}
                 type={props._type}
-                onclick={onclick} >
+                // onclick={onclick} >
+                >
                 {props.children}
             </button>
+
         }
     }
 
-    fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        ctx.props().misc_attrs.render(&self.node_ref);
+    fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
+        ctx.props().misc_attrs.inject(&self.node_ref);
+        if let Some(aria) = ctx.props().aria.clone() {
+            aria.inject(&self.node_ref);
+        }
+
+        if first_render {
+            if let Some(dom_attrs) = ctx.props().dom_attrs.clone() {
+                dom_attrs.inject(&self.node_ref);
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 use yew::prelude::*;
-
-use crate::MiscAttrs;
+use yew_dom_attributes::attribute_collection::AttributeCollection;
+use yew_dom_attributes::misc_attributes::MiscAttrs;
 
 use super::button::ClayButton;
 
@@ -41,7 +41,7 @@ impl Component for Group {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        ctx.props().misc_attrs.render(&self.node_ref);
+        ctx.props().misc_attrs.inject(&self.node_ref);
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -54,20 +54,26 @@ impl Component for Group {
             class.push("btn-group".into());
         }
 
-        let children = props.children.clone();
+        let children = if props.spaced {
+            props
+                .children
+                .clone()
+                .into_iter()
+                .enumerate()
+                .map(|(key, child)| {
+                    html! {<div class={"btn-group-item"} key={key}>{child}</div>}
+                })
+                .collect::<Html>()
+        } else {
+            props.children.clone().into_iter().collect::<Html>()
+        };
 
         html! {
             <div
                 class={class.join(" ")}
                 role={props.role.clone()}
             >
-            { if props.spaced {
-                children.into_iter().enumerate().map(|(key, child)| {
-                    html!{<div class={"btn-group-item"} key={key}>{child}</div>}
-                }).collect::<Html>()
-            } else {
-                children.into_iter().collect::<Html>()
-            }}
+            { children }
             </div>
 
         }

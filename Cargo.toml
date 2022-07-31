@@ -20,6 +20,7 @@ web-sys = "0.3.59"
 stdweb = "0.4.20"
 strum = "0.24.1"
 strum_macros = "0.24.2"
+yew-dom-attributes = { path = "/Users/brianheise/code/toadslop/yew-dom-attributes", features = ["full"]}
 
 [features]
 button = []
