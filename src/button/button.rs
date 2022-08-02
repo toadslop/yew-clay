@@ -1,56 +1,68 @@
+use gloo_events::EventListener;
 use strum_macros::Display;
-use web_sys::MouseEvent;
-use yew::{
-    html, virtual_dom::VNode, Callback, Children, Component, Context, Html, NodeRef, Properties,
-};
+use yew::{html, virtual_dom::VNode, Children, Component, Context, Html, NodeRef, Properties};
+use yew_dom_attributes::attribute_injector::AttributeInjector;
+use yew_dom_attributes::button_html_attributes::ButtonProps;
+use yew_dom_attributes::listener_injector::ListenerInjector;
 
-use crate::MiscAttrs;
-
-/// A Yew implementation of ClayButton.
+/// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
+/// [https://clayui.com/docs/components/button.html]
 pub struct ClayButton {
+    /// Set this on instantiation so that you can interact with the underlying DOM element.
     node_ref: NodeRef,
-}
-
-pub enum Msg {
-    Clicked(MouseEvent),
+    /// This vec holds all the EventListeners defined for this button. They will be automatically
+    /// removed when the button is destroyed.
+    listeners: Vec<EventListener>,
 }
 
 /// Props for ClayButton. For details, check the docs:
 /// https://clayui.com/docs/components/button/api.html
 #[derive(Debug, Properties, PartialEq, Clone)]
-pub struct ButtonProps {
-    #[prop_or(false)]
-    pub disabled: bool,
+pub struct ClayButtonProps {
+    /// Flag to indicate if button is used within an alert component.
     #[prop_or(false)]
     pub alert: bool,
+
+    /// Flag to indicate if link should be borderless.
     #[prop_or(false)]
     pub borderless: bool,
+
+    /// Renders the button as a block element.
     #[prop_or(false)]
     pub block: bool,
+
+    /// Determines how to button is displayed. Follows bootstrap coloring scheme.
     #[prop_or(DisplayType::Primary)]
     pub display_type: DisplayType,
+
+    /// Flag to indicate if button should be monospaced.
     #[prop_or(false)]
     pub monospaced: bool,
+
+    /// Flag to indicate if link needs to have an outline.
     #[prop_or(false)]
     pub outline: bool,
+
+    /// Indicates button should be a small variant.
     #[prop_or(false)]
     pub small: bool,
+
     #[prop_or_default]
     pub children: Children,
-    #[prop_or_default]
-    pub onclick: Callback<MouseEvent>,
+
     #[prop_or("button".to_string())]
     pub _type: String,
-    /// Arbitrary props that will be passed down to the underlying component.
-    /// If the value is None, it represents a boolean attribute.
-    #[prop_or_default]
-    pub misc_attrs: MiscAttrs,
+
     #[prop_or_default]
     pub node_ref: NodeRef,
+
+    /// A catchall prop to pass down anything not specified here to the underlying component.
+    #[prop_or_default]
+    pub button_html_attributes: Option<ButtonProps>,
 }
 
 impl ClayButton {
-    fn get_classes(&self, props: &ButtonProps) -> String {
+    fn get_classes(&self, props: &ClayButtonProps) -> String {
         let mut classes: Vec<String> = vec!["btn".into()];
 
         if props.alert {
@@ -86,22 +98,14 @@ impl ClayButton {
 }
 
 impl Component for ClayButton {
-    type Message = Msg;
-    type Properties = ButtonProps;
+    type Message = ();
+    type Properties = ClayButtonProps;
 
     fn create(ctx: &Context<Self>) -> Self {
         Self {
             node_ref: ctx.props().node_ref.clone(),
+            listeners: Vec::new(),
         }
-    }
-
-    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::Clicked(ev) => {
-                ctx.props().onclick.emit(ev);
-            }
-        }
-        false
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -115,42 +119,42 @@ impl Component for ClayButton {
 
         let classes = self.get_classes(&props);
 
-        let onclick = ctx.link().callback(|ev| Msg::Clicked(ev));
-
         html! {
             <button
                 class={classes}
-                disabled={ctx.props().disabled}
                 ref={self.node_ref.clone()}
-                type={props._type}
-                onclick={onclick} >
+                type={props._type} >
                 {props.children}
             </button>
         }
     }
 
-    fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        ctx.props().misc_attrs.render(&self.node_ref);
+    fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
+        if let Some(mut misc_props) = ctx.props().button_html_attributes.clone() {
+            misc_props.inject(&self.node_ref).unwrap();
+            if first_render {
+                match misc_props.inject_listeners(&self.node_ref) {
+                    Ok(listeners) => {
+                        let listeners = &mut listeners.unwrap();
+                        self.listeners.append(listeners);
+                    }
+                    Err(_) => todo!(),
+                }
+            }
+        }
     }
 }
 
-// An enum specifying the different default styles of this button.
+// An enum specifying the different default styles of ClayButton.
 #[derive(Debug, PartialEq, Clone, Display)]
+#[strum(serialize_all = "lowercase")]
 pub enum DisplayType {
-    #[strum(serialize = "primary")]
     Primary,
-    #[strum(serialize = "secondary")]
     Secondary,
-    #[strum(serialize = "link")]
     Link,
-    #[strum(serialize = "success")]
     Success,
-    #[strum(serialize = "warning")]
     Warning,
-    #[strum(serialize = "danger")]
     Danger,
-    #[strum(serialize = "info")]
     Info,
-    #[strum(serialize = "unstyled")]
     Unstyled,
 }

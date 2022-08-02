@@ -20,6 +20,8 @@ web-sys = "0.3.59"
 stdweb = "0.4.20"
 strum = "0.24.1"
 strum_macros = "0.24.2"
+yew-dom-attributes = { path = "/home/toadslop/code/toadslop/yew/yew-dom-attributes" }
+gloo-events = "0.1.2"
 
 [features]
 button = []
