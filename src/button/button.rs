@@ -2,8 +2,8 @@ use gloo_events::EventListener;
 use strum_macros::Display;
 use yew::{html, virtual_dom::VNode, Children, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::attribute_injector::AttributeInjector;
-use yew_dom_attributes::button_html_attributes::ButtonProps;
 use yew_dom_attributes::listener_injector::ListenerInjector;
+use yew_dom_attributes::props::button_props::ButtonProps;
 
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html]
