@@ -8,7 +8,6 @@ use yew_dom_attributes::props::button_props::ButtonProps;
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html]
 pub struct ClayButton {
-    /// Set this on instantiation so that you can interact with the underlying DOM element.
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
@@ -17,7 +16,7 @@ pub struct ClayButton {
 
 /// Props for ClayButton. For details, check the docs:
 /// https://clayui.com/docs/components/button/api.html
-#[derive(Debug, Properties, PartialEq, Clone)]
+#[derive(Debug, Properties, PartialEq, Clone, Default)]
 pub struct ClayButtonProps {
     /// Flag to indicate if button is used within an alert component.
     #[prop_or(false)]
@@ -36,8 +35,8 @@ pub struct ClayButtonProps {
     pub display_type: DisplayType,
 
     /// Flag to indicate if button should be monospaced.
-    #[prop_or(false)]
-    pub monospaced: bool,
+    #[prop_or_default]
+    pub monospaced: Option<bool>,
 
     /// Flag to indicate if link needs to have an outline.
     #[prop_or(false)]
@@ -58,7 +57,15 @@ pub struct ClayButtonProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub button_html_attributes: Option<ButtonProps>,
+    pub button_props: Option<ButtonProps>,
+
+    /// This prop allows you to optimize your use of this component.
+    /// It defaults to 1, meaning if you don't need any events, it
+    /// won't allocate space for them. If you expect to attach 2
+    /// listeners, set this prop to 2 and you'll get exactly space for 2
+    /// allocated.
+    #[prop_or(1)]
+    pub event_count: usize,
 }
 
 impl ClayButton {
@@ -73,7 +80,7 @@ impl ClayButton {
             classes.push("btn-block".into());
         }
 
-        if props.monospaced {
+        if props.monospaced.unwrap_or(false) {
             classes.push("btn-monospaced".into());
         }
 
@@ -102,9 +109,10 @@ impl Component for ClayButton {
     type Properties = ClayButtonProps;
 
     fn create(ctx: &Context<Self>) -> Self {
+        let props = ctx.props();
         Self {
-            node_ref: ctx.props().node_ref.clone(),
-            listeners: Vec::new(),
+            node_ref: props.node_ref.clone(),
+            listeners: Vec::with_capacity(props.event_count),
         }
     }
 
@@ -130,13 +138,12 @@ impl Component for ClayButton {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
-        if let Some(mut misc_props) = ctx.props().button_html_attributes.clone() {
+        if let Some(mut misc_props) = ctx.props().button_props.clone() {
             misc_props.inject(&self.node_ref).unwrap();
             if first_render {
                 match misc_props.inject_listeners(&self.node_ref) {
-                    Ok(listeners) => {
-                        let listeners = &mut listeners.unwrap();
-                        self.listeners.append(listeners);
+                    Ok(mut listeners) => {
+                        self.listeners.append(&mut listeners);
                     }
                     Err(_) => todo!(),
                 }
@@ -146,9 +153,10 @@ impl Component for ClayButton {
 }
 
 // An enum specifying the different default styles of ClayButton.
-#[derive(Debug, PartialEq, Clone, Display)]
+#[derive(Debug, PartialEq, Clone, Display, Default)]
 #[strum(serialize_all = "lowercase")]
 pub enum DisplayType {
+    #[default]
     Primary,
     Secondary,
     Link,

@@ -1,14 +1,15 @@
 use gloo_events::EventListener;
 use yew::prelude::*;
-use yew_dom_attributes::attribute_injector::AttributeInjector;
-use yew_dom_attributes::listener_injector::ListenerInjector;
 
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
+use yew_dom_attributes::{
+    attribute_injector::AttributeInjector, listener_injector::ListenerInjector,
+    props::html_element_props::HtmlElementProps,
+};
 
 use super::button::ClayButton;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
-pub struct ButtonGroup {
+pub struct ClayButtonGroup {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
@@ -33,16 +34,25 @@ pub struct ButtonGroupProps {
     pub node_ref: NodeRef,
     #[prop_or_default]
     pub html_element_props: Option<HtmlElementProps>,
+
+    /// This prop allows you to optimize your use of this component.
+    /// It defaults to 1, meaning if you don't need any events, it
+    /// won't allocate space for them. If you expect to attach 2
+    /// listeners, set this prop to 2 and you'll get exactly space for 2
+    /// allocated.
+    #[prop_or(0)]
+    pub event_count: usize,
 }
 
-impl Component for ButtonGroup {
+impl Component for ClayButtonGroup {
     type Message = ();
     type Properties = ButtonGroupProps;
 
     fn create(ctx: &Context<Self>) -> Self {
+        let props = ctx.props();
         Self {
-            node_ref: ctx.props().node_ref.clone(),
-            listeners: Vec::new(),
+            node_ref: props.node_ref.clone(),
+            listeners: Vec::with_capacity(props.event_count),
         }
     }
 
@@ -51,9 +61,8 @@ impl Component for ButtonGroup {
             html_props.inject(&self.node_ref).unwrap();
             if first_render {
                 match html_props.inject_listeners(&self.node_ref) {
-                    Ok(listeners) => {
-                        let listeners = &mut listeners.unwrap();
-                        self.listeners.append(listeners);
+                    Ok(mut listeners) => {
+                        self.listeners.append(&mut listeners);
                     }
                     Err(_) => todo!(),
                 }
