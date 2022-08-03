@@ -17,9 +17,6 @@ pub struct IconProps {
     pub spritemap: String,
     #[prop_or_default]
     pub symbol: String,
-    /// Arbitrary props that will be passed down to the underlying component.
-    #[prop_or_default]
-    pub misc_attrs: MiscAttrs,
     #[prop_or_default]
     pub node_ref: NodeRef,
 }
@@ -32,13 +29,6 @@ impl Component for ClayIcon {
         Self {
             node_ref: ctx.props().node_ref.clone(),
         }
-    }
-
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            () => {}
-        }
-        false
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
