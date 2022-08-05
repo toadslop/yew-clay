@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+use std::rc::Rc;
+
 use gloo_events::EventListener;
 use strum_macros::Display;
 use yew::{html, virtual_dom::VNode, Children, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::attribute_injector::AttributeInjector;
-use yew_dom_attributes::listener_injector::ListenerInjector;
-use yew_dom_attributes::props::button_props::ButtonProps;
+use yew_dom_attributes::props::button_props::ButtonProps2;
+use yew_dom_attributes::props::DomInjector;
 
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html]
@@ -12,7 +14,7 @@ pub struct ClayButton {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: Vec<EventListener>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayButton. For details, check the docs:
@@ -57,8 +59,9 @@ pub struct ClayButtonProps {
     pub node_ref: NodeRef,
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
+
     #[prop_or_default]
-    pub button_html_attributes: Option<ButtonProps>,
+    pub button_html_attributes: Option<Rc<ButtonProps2>>,
 }
 
 impl ClayButton {
@@ -104,12 +107,12 @@ impl Component for ClayButton {
     fn create(ctx: &Context<Self>) -> Self {
         Self {
             node_ref: ctx.props().node_ref.clone(),
-            listeners: Vec::new(),
+            listeners: HashMap::new(),
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
+        let props = ctx.props();
 
         let children: Vec<VNode> = props.children.iter().collect();
 
@@ -123,24 +126,19 @@ impl Component for ClayButton {
             <button
                 class={classes}
                 ref={self.node_ref.clone()}
-                type={props._type} >
-                {props.children}
+                type={props._type.clone()} >
+                {props.children.clone()}
             </button>
         }
     }
 
-    fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
-        if let Some(mut misc_props) = ctx.props().button_html_attributes.clone() {
-            misc_props.inject(&self.node_ref).unwrap();
-            if first_render {
-                match misc_props.inject_listeners(&self.node_ref) {
-                    Ok(listeners) => {
-                        let listeners = &mut listeners.unwrap();
-                        self.listeners.append(listeners);
-                    }
-                    Err(_) => todo!(),
-                }
-            }
+    fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
+        if let Some(button_props) = &ctx.props().button_html_attributes {
+            let mut button_props = button_props.clone();
+            Rc::make_mut(&mut button_props).inject(&self.node_ref, &mut self.listeners);
+            button_props
+                .get_props_update_callback()
+                .emit(button_props.clone());
         }
     }
 }

@@ -49,15 +49,15 @@ impl Component for ButtonGroup {
     fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
         if let Some(mut html_props) = ctx.props().html_element_props.clone() {
             html_props.inject(&self.node_ref).unwrap();
-            if first_render {
-                match html_props.inject_listeners(&self.node_ref) {
-                    Ok(listeners) => {
-                        let listeners = &mut listeners.unwrap();
-                        self.listeners.append(listeners);
-                    }
-                    Err(_) => todo!(),
-                }
-            }
+            // if first_render {
+            //     match html_props.inject_listeners(&self.node_ref) {
+            //         Ok(listeners) => {
+            //             let listeners = &mut listeners;
+            //             self.listeners.append(listeners);
+            //         }
+            //         Err(_) => todo!(),
+            //     }
+            // }
         }
     }
 

@@ -55,6 +55,6 @@ impl Component for ClayIcon {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        ctx.props().misc_attrs.render(&self.node_ref);
+        // ctx.props().misc_attrs.render(&self.node_ref);
     }
 }
