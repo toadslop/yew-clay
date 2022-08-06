@@ -103,7 +103,6 @@ impl Component for ClayButton {
     type Properties = ClayButtonProps;
 
     fn create(ctx: &Context<Self>) -> Self {
-        let props = ctx.props();
         Self {
             node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
