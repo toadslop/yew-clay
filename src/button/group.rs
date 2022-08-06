@@ -4,12 +4,15 @@ use gloo_events::EventListener;
 use yew::{html, ChildrenWithProps, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::DomInjector;
 
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
+use yew_dom_attributes::{
+    attribute_injector::AttributeInjector, listener_injector::ListenerInjector,
+    props::html_element_props::HtmlElementProps,
+};
 
 use super::button::ClayButton;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
-pub struct ButtonGroup {
+pub struct ClayButtonGroup {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
@@ -36,11 +39,12 @@ pub struct ButtonGroupProps {
     pub html_element_props: Option<Rc<HtmlElementProps>>,
 }
 
-impl Component for ButtonGroup {
+impl Component for ClayButtonGroup {
     type Message = ();
     type Properties = ButtonGroupProps;
 
     fn create(ctx: &Context<Self>) -> Self {
+        let props = ctx.props();
         Self {
             node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),

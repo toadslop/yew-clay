@@ -24,6 +24,8 @@ pub struct IconProps {
     #[prop_or_default]
     pub symbol: String,
     #[prop_or_default]
+    pub svg_props: Option<SVGProps>,
+    #[prop_or_default]
     pub node_ref: NodeRef,
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
