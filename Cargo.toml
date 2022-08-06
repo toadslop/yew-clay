@@ -23,6 +23,7 @@ strum_macros = "0.24.2"
 yew-dom-attributes = { path = "/Users/brianheise/code/toadslop/yew/yew-dom-attributes" }
 gloo-events = "0.1.2"
 gloo-console = "0.2.1"
+derive_more = "0.99.17"
 
 [features]
 button = []
