@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use gloo_events::EventListener;
 use strum_macros::Display;
-use yew::{html, virtual_dom::VNode, Children, Component, Context, Html, NodeRef, Properties};
+use yew::{html, Children, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::button_props::ButtonProps;
 use yew_dom_attributes::props::DomInjector;
 
@@ -111,12 +111,6 @@ impl Component for ClayButton {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let props = ctx.props();
-
-        let children: Vec<VNode> = props.children.iter().collect();
-
-        if children.len() > 1 {
-            panic!("Clay Button only accepts a single text node as a child");
-        };
 
         let classes = self.get_classes(&props);
 
