@@ -1,5 +1,6 @@
 use super::button::ClayButton;
 use crate::icon::ClayIcon;
+use gloo_console::log;
 use yew::{html, Component, Context, NodeRef, Properties};
 use yew_dom_attributes::props::svg_props::SVGProps;
 
@@ -16,16 +17,19 @@ pub struct ButtonWithIconProps {
     /// Path to the spritemap that contains your SVG icons. The default Clay SVGs can be found
     /// here [https://github.com/liferay/clay/blob/master/clayui.com/static/images/icons/icons.svg]
     #[prop_or_default]
-    spritemap: String,
+    pub spritemap: String,
+
     /// String identifying the SVG from the spritemap that you want to render.
     #[prop_or_default]
-    symbol: String,
+    pub symbol: String,
+
     /// Props to be passed down to the ClayButton component that this element wraps.
     #[prop_or_default]
-    clay_button_props: ClayButtonProps,
-    #[prop_or_default]
+    pub clay_button_props: ClayButtonProps,
+
     /// Props to be passed down to the underlying SVG of the icon.
-    icon_svg_props: Option<SVGProps>,
+    #[prop_or_default]
+    pub icon_svg_props: Option<SVGProps>,
 
     /// The NodeRef for the underlying icon. To provide a NodeRef for the underlying button,
     /// use node_ref in clay_button_props.
@@ -44,9 +48,14 @@ impl Component for ClayButtonWithIcon {
 
     fn view(&self, ctx: &Context<Self>) -> yew::Html {
         let props = ctx.props();
-        let button_props = props.clay_button_props.clone();
+        let mut button_props = props.clay_button_props.clone();
         let button_ref = button_props.node_ref.clone();
         let monospaced = button_props.monospaced.unwrap_or(true);
+
+        // Workaround for Yew bug that is making the default value an empty string for some reason.
+        if button_props._type.len() == 0 {
+            button_props._type = "button".into();
+        }
 
         html! {
             <ClayButton
