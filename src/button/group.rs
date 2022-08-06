@@ -1,7 +1,8 @@
+use std::{collections::HashMap, rc::Rc};
+
 use gloo_events::EventListener;
-use yew::prelude::*;
-use yew_dom_attributes::attribute_injector::AttributeInjector;
-use yew_dom_attributes::listener_injector::ListenerInjector;
+use yew::{html, ChildrenWithProps, Component, Context, Html, NodeRef, Properties};
+use yew_dom_attributes::props::DomInjector;
 
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 
@@ -12,7 +13,7 @@ pub struct ButtonGroup {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: Vec<EventListener>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for Button Group. For details, check the docs:
@@ -32,7 +33,7 @@ pub struct ButtonGroupProps {
     #[prop_or_default]
     pub node_ref: NodeRef,
     #[prop_or_default]
-    pub html_element_props: Option<HtmlElementProps>,
+    pub html_element_props: Option<Rc<HtmlElementProps>>,
 }
 
 impl Component for ButtonGroup {
@@ -42,22 +43,17 @@ impl Component for ButtonGroup {
     fn create(ctx: &Context<Self>) -> Self {
         Self {
             node_ref: ctx.props().node_ref.clone(),
-            listeners: Vec::new(),
+            listeners: HashMap::new(),
         }
     }
 
-    fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
-        if let Some(mut html_props) = ctx.props().html_element_props.clone() {
-            html_props.inject(&self.node_ref).unwrap();
-            // if first_render {
-            //     match html_props.inject_listeners(&self.node_ref) {
-            //         Ok(listeners) => {
-            //             let listeners = &mut listeners;
-            //             self.listeners.append(listeners);
-            //         }
-            //         Err(_) => todo!(),
-            //     }
-            // }
+    fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
+        if let Some(html_props) = &ctx.props().html_element_props {
+            let mut html_props = html_props.clone();
+            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
+            html_props
+                .get_props_update_callback()
+                .emit(html_props.clone());
         }
     }
 

@@ -1,10 +1,16 @@
-use yew::{html, Component, Context, Html, NodeRef, Properties};
+use std::{collections::HashMap, rc::Rc};
+use yew_dom_attributes::props::DomInjector;
 
-use crate::MiscAttrs;
+use gloo_events::EventListener;
+use yew::{html, Component, Context, Html, NodeRef, Properties};
+use yew_dom_attributes::props::svg_props::SVGProps;
 
 /// A Yew implementation of ClayIcon.
 pub struct ClayIcon {
     node_ref: NodeRef,
+    /// This vec holds all the EventListeners defined for this button. They will be automatically
+    /// removed when the button is destroyed.
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayIcon. For details, check the docs:
@@ -19,6 +25,9 @@ pub struct IconProps {
     pub symbol: String,
     #[prop_or_default]
     pub node_ref: NodeRef,
+    /// A catchall prop to pass down anything not specified here to the underlying component.
+    #[prop_or_default]
+    pub svg_html_attributes: Option<Rc<SVGProps>>,
 }
 
 impl Component for ClayIcon {
@@ -28,6 +37,7 @@ impl Component for ClayIcon {
     fn create(ctx: &Context<Self>) -> Self {
         Self {
             node_ref: ctx.props().node_ref.clone(),
+            listeners: HashMap::new(),
         }
     }
 
@@ -55,6 +65,12 @@ impl Component for ClayIcon {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        // ctx.props().misc_attrs.render(&self.node_ref);
+        if let Some(svg_props) = &ctx.props().svg_html_attributes {
+            let mut svg_props = svg_props.clone();
+            Rc::make_mut(&mut svg_props).inject(&self.node_ref, &mut self.listeners);
+            svg_props
+                .get_props_update_callback()
+                .emit(svg_props.clone());
+        }
     }
 }

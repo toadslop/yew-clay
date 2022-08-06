@@ -4,7 +4,7 @@ use std::rc::Rc;
 use gloo_events::EventListener;
 use strum_macros::Display;
 use yew::{html, virtual_dom::VNode, Children, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::button_props::ButtonProps2;
+use yew_dom_attributes::props::button_props::ButtonProps;
 use yew_dom_attributes::props::DomInjector;
 
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
@@ -59,9 +59,8 @@ pub struct ClayButtonProps {
     pub node_ref: NodeRef,
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
-
     #[prop_or_default]
-    pub button_html_attributes: Option<Rc<ButtonProps2>>,
+    pub button_html_attributes: Option<Rc<ButtonProps>>,
 }
 
 impl ClayButton {
