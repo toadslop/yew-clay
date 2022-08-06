@@ -1,12 +1,15 @@
 use std::{collections::HashMap, rc::Rc};
 
 use gloo_events::EventListener;
-use yew::{html, ChildrenWithProps, Component, Context, Html, NodeRef, Properties};
+use yew::virtual_dom::VChild;
+use yew::NodeRef;
+use yew::{html, html::ChildrenRenderer, Component, Context, Html, Properties};
 use yew_dom_attributes::props::DomInjector;
 
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 
 use super::button::ClayButton;
+use super::ClayButtonWithIcon;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
 pub struct ClayButtonGroup {
@@ -27,13 +30,30 @@ pub struct ButtonGroupProps {
     #[prop_or("group".into())]
     pub role: String,
     #[prop_or_default]
-    pub children: ChildrenWithProps<ClayButton>,
+    pub children: ChildrenRenderer<ButtonType>,
     #[prop_or_default]
     pub class: String,
     #[prop_or_default]
     pub node_ref: NodeRef,
     #[prop_or_default]
     pub html_element_props: Option<Rc<HtmlElementProps>>,
+}
+
+#[derive(Clone, derive_more::From, PartialEq)]
+pub enum ButtonType {
+    Button(VChild<ClayButton>),
+    IconButton(VChild<ClayButtonWithIcon>),
+}
+
+// Now, we implement `Into<Html>` so that yew knows how to render `Item`.
+#[allow(clippy::from_over_into)]
+impl Into<Html> for ButtonType {
+    fn into(self) -> Html {
+        match self {
+            Self::Button(child) => child.into(),
+            Self::IconButton(child) => child.into(),
+        }
+    }
 }
 
 impl Component for ClayButtonGroup {
