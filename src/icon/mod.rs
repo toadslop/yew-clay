@@ -55,14 +55,14 @@ impl Component for ClayIcon {
         let xlink_href = format!("{}#{}", props.spritemap, props.symbol);
 
         html! {
-          <svg
-            class={class}
-            key={props.symbol}
-            ref={self.node_ref.clone()}
-            role="presentation"
-          >
-            <use xlinkHref={xlink_href} />
-          </svg>
+            <svg
+                class={class}
+                key={props.symbol}
+                ref={self.node_ref.clone()}
+                role="presentation"
+            >
+                <use href={xlink_href} />
+            </svg>
         }
     }
 
