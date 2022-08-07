@@ -1,6 +1,5 @@
 use super::button::ClayButton;
 use crate::icon::ClayIcon;
-use gloo_console::log;
 use yew::{html, Component, Context, NodeRef, Properties};
 use yew_dom_attributes::props::svg_props::SVGProps;
 

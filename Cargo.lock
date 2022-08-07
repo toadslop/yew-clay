@@ -68,6 +68,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "212d0f5754cb6769937f4501cc0e67f4f4483c8d2c3e1e922ee9edbe4ab4c7c0"
 
 [[package]]
+name = "domatt"
+version = "0.1.0"
+source = "git+https://github.com/toadslop/domatt#5c5d5136b5509f32b1cab4a648788b1161e5e14a"
+dependencies = [
+ "strum",
+ "web-sys",
+]
+
+[[package]]
 name = "gloo"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -619,6 +628,7 @@ dependencies = [
 name = "yew-dom-attributes"
 version = "0.1.0"
 dependencies = [
+ "domatt",
  "gloo-console",
  "gloo-events",
  "strum",

@@ -28,9 +28,10 @@ derive_more = "0.99.17"
 [features]
 button = []
 icon = []
-props = []
+layout = []
 full = [
     "button",
     "icon",
+    "layout"
 ]
-default = ["button", "icon"]
+default = ["button", "icon", "layout"]
