@@ -21,3 +21,20 @@ pub enum Sizing {
     #[strum(serialize = "xl")]
     XLarge,
 }
+
+trait HasBoolClass {
+    fn get_bool_class(&self, boolean: Option<bool>, class_name: &'static str) -> Option<String> {
+        if let Some(boolean) = boolean {
+            self.match_bool(boolean, class_name)
+        } else {
+            None
+        }
+    }
+
+    fn match_bool(&self, boolean: bool, class_name: &'static str) -> Option<String> {
+        match boolean {
+            true => Some(class_name.into()),
+            false => None,
+        }
+    }
+}

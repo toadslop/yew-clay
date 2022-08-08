@@ -3,10 +3,17 @@ use std::rc::Rc;
 use yew::{Children, Classes, NodeRef, Properties};
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 
-pub mod sheet;
-pub mod sheet_footer;
-pub mod sheet_header;
-pub mod sheet_section;
+mod sheet;
+pub use sheet::*;
+
+mod sheet_footer;
+pub use sheet_footer::*;
+
+mod sheet_header;
+pub use sheet_header::*;
+
+mod sheet_section;
+pub use sheet_section::*;
 
 /// A generic set of props for container elements.
 #[derive(Debug, Properties, PartialEq, Clone, Default)]

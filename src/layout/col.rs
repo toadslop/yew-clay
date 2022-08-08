@@ -1,8 +1,6 @@
+use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-
-use super::container::ClayContainer;
-use gloo_events::EventListener;
 use strum::Display;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
@@ -164,12 +162,11 @@ impl Component for ClayCol {
         let xl_class = self.get_col_size_class(&xl, ScreenSize::Xl);
 
         html! {
-            <ClayContainer
+            <@{container_element}
                 class={classes!(class, col_class, lg_class, md_class, xs_class, sm_class, xl_class)}
-                container_element={container_element}
                 ref={self.node_ref.clone()} >
                 {children.clone()}
-            </ClayContainer>
+            </@>
         }
     }
 
