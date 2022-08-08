@@ -4,7 +4,7 @@ use std::rc::Rc;
 use super::container::ClayContainer;
 use crate::Sizing;
 use gloo_events::EventListener;
-use yew::{html, Children, Component, Context, Html, NodeRef, Properties};
+use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 use yew_dom_attributes::props::DomInjector;
 
@@ -36,7 +36,7 @@ pub struct ClayContainerFluidProps {
     pub view: bool,
 
     #[prop_or_default]
-    pub class: String,
+    pub class: Classes,
 
     #[prop_or_default]
     pub children: Children,

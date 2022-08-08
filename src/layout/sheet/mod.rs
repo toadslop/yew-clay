@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use yew::{Children, NodeRef, Properties};
+use yew::{Children, Classes, NodeRef, Properties};
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 
 pub mod sheet;
@@ -18,7 +18,7 @@ pub struct ContainerProps {
     /// Intercepts the class tag from the parent so it can be modified with classes
     /// necessary for this container.
     #[prop_or_default]
-    pub class: String,
+    pub class: Classes,
 
     #[prop_or_default]
     pub children: Children,

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use gloo_events::EventListener;
-use yew::{classes, html, Children, Component, Context, Html, NodeRef, Properties};
+use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 
 use yew_dom_attributes::props::{html_element_props::HtmlElementProps, DomInjector};
 
@@ -26,7 +26,7 @@ pub struct SheetProps {
     /// Intercepts the class tag from the parent so it can be modified with classes
     /// necessary for this container.
     #[prop_or_default]
-    pub class: String,
+    pub class: Classes,
 
     #[prop_or_default]
     pub children: Children,
