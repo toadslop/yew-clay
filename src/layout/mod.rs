@@ -12,3 +12,6 @@ pub use content::*;
 
 mod sheet;
 pub use sheet::*;
+
+mod row;
+pub use row::*;
