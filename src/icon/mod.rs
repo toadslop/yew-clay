@@ -2,7 +2,7 @@ use std::{collections::HashMap, rc::Rc};
 use yew_dom_attributes::props::DomInjector;
 
 use gloo_events::EventListener;
-use yew::{html, Component, Context, Html, NodeRef, Properties};
+use yew::{classes, html, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::svg_props::SVGProps;
 
 /// A Yew implementation of ClayIcon.
@@ -18,7 +18,7 @@ pub struct ClayIcon {
 #[derive(Debug, Properties, PartialEq, Clone)]
 pub struct IconProps {
     #[prop_or_default]
-    pub class: String,
+    pub class: Classes,
     #[prop_or_default]
     pub spritemap: String,
     #[prop_or_default]
@@ -45,18 +45,14 @@ impl Component for ClayIcon {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let props = ctx.props().clone();
-        let class = vec![
-            props.class,
-            "lexicon-icon".into(),
-            format!("lexicon-icon-{}", props.symbol),
-        ]
-        .join(" ");
+        let user_classes = props.class;
+        let icon_class = format!("lexicon-icon-{}", props.symbol);
 
         let xlink_href = format!("{}#{}", props.spritemap, props.symbol);
 
         html! {
             <svg
-                class={class}
+                class={classes!(user_classes, "lexicon-icon", icon_class)}
                 key={props.symbol}
                 ref={self.node_ref.clone()}
                 role="presentation"

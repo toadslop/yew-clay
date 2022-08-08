@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use gloo_events::EventListener;
 use strum_macros::Display;
-use yew::{html, Children, Component, Context, Html, NodeRef, Properties};
+use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::button_props::ButtonProps;
 use yew_dom_attributes::props::DomInjector;
 
@@ -56,6 +56,9 @@ pub struct ClayButtonProps {
 
     #[prop_or_default]
     pub node_ref: NodeRef,
+
+    #[prop_or_default]
+    pub class: Classes,
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
@@ -112,11 +115,12 @@ impl Component for ClayButton {
     fn view(&self, ctx: &Context<Self>) -> Html {
         let props = ctx.props();
 
-        let classes = self.get_classes(&props);
+        let btn_classes = self.get_classes(&props);
+        let user_classes = props.class.clone();
 
         html! {
             <button
-                class={classes}
+                class={classes!(btn_classes, user_classes)}
                 ref={self.node_ref.clone()}
                 type={props._type.clone()} >
                 {props.children.clone()}

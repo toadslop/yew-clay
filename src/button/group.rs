@@ -2,7 +2,7 @@ use std::{collections::HashMap, rc::Rc};
 
 use gloo_events::EventListener;
 use yew::virtual_dom::VChild;
-use yew::NodeRef;
+use yew::{classes, Classes, NodeRef};
 use yew::{html, html::ChildrenRenderer, Component, Context, Html, Properties};
 use yew_dom_attributes::props::DomInjector;
 
@@ -32,7 +32,7 @@ pub struct ButtonGroupProps {
     #[prop_or_default]
     pub children: ChildrenRenderer<ButtonType>,
     #[prop_or_default]
-    pub class: String,
+    pub class: Classes,
     #[prop_or_default]
     pub node_ref: NodeRef,
     #[prop_or_default]
@@ -79,19 +79,19 @@ impl Component for ClayButtonGroup {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let props = ctx.props();
-        let mut class = vec![props.class.clone()];
+        let user_classes = props.class.clone();
 
-        if props.vertical {
-            class.push("btn-group-vertical".into());
+        let btn_group_class = if props.vertical {
+            "btn-group-vertical".to_string()
         } else {
-            class.push("btn-group".into());
-        }
+            "btn-group".to_string()
+        };
 
         let children = props.children.clone();
 
         html! {
             <div
-                class={class.join(" ")}
+                class={classes!(user_classes, btn_group_class)}
                 role={props.role.clone()}
             >
             { if props.spaced {
