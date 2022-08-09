@@ -9,6 +9,9 @@ pub mod icon;
 #[cfg(feature = "layout")]
 pub mod layout;
 
+#[cfg(feature = "alert")]
+pub mod alert;
+
 /// An enum specifying size varients.
 #[derive(Debug, PartialEq, Clone, Display)]
 pub enum Sizing {

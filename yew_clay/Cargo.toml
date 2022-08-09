@@ -1,0 +1,40 @@
+[package]
+name = "yew-clay"
+authors = ["toadslop <bnheise@gmail.com>"]
+version = "0.1.0"
+edition = "2021"
+readme = "./README.md"
+repository = "tbd"
+homepage = "tbd"
+keywords = ["clayui", "yew", "wasm"]
+categories = ["web-programming", "wasm", "api-bindings", "gui"]
+# include = ["src/**/*", "Cargo.toml", "build"]
+license = "Apache-2.0"
+description = "Yew wrapper for Clay Web Components"
+
+[dependencies]
+js-sys = "0.3.58"
+wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"]}
+yew = "0.19.3"
+web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
+stdweb = "0.4.20"
+strum = { version = "0.24.1", features = ["derive"] }
+strum_macros = "0.24.2"
+yew-dom-attributes = { path = "../../yew-dom-attributes" }
+gloo-events = "0.1.2"
+gloo-console = "0.2.1"
+derive_more = { version = "0.99.17", features = ["from"]}
+gloo-timers = "0.2.4"
+
+[features]
+button = []
+icon = []
+layout = []
+alert = []
+full = [
+    "button",
+    "icon",
+    "layout",
+    "alert",
+]
+default = ["button", "icon", "layout", "alert"]

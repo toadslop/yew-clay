@@ -1,12 +1,8 @@
+use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-
-use gloo_events::EventListener;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-
 use yew_dom_attributes::props::{html_element_props::HtmlElementProps, DomInjector};
-
-use super::ContainerProps;
 
 /// A Yew implementation of ClaySheet.
 pub struct ClaySheet {
