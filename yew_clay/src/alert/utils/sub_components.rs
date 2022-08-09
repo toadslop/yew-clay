@@ -31,7 +31,6 @@ pub struct AlertIndicatorProps {
 #[function_component(AlertIndicator)]
 pub fn alert_indicator(props: &AlertIndicatorProps) -> Html {
     let spritemap = props.spritemap.clone();
-    gloo_console::info!(props.display_type.to_string());
     let symbol = match &props.display_type {
         AlertDisplayType::Danger => "exclamation-full",
         AlertDisplayType::Info => "info-circle",

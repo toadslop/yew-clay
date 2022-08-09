@@ -145,10 +145,7 @@ impl Component for ClayAlert {
         };
         let stripe_alert_indicator = if let Some(variant) = variant.as_ref() {
             match variant {
-                AlertVariant::Stripe => {
-                    gloo_console::log!("Strip alert indicator");
-                    stripe_alert
-                }
+                AlertVariant::Stripe => stripe_alert,
                 _ => html! {},
             }
         } else {
@@ -158,13 +155,10 @@ impl Component for ClayAlert {
         let default_alert_indicator = if let Some(variant) = variant.as_ref() {
             match variant {
                 AlertVariant::Stripe => html! {},
-                _ => {
-                    gloo_console::log!("Default alert indicator");
-                    html! {<AlertIndicator
-                        spritemap={spritemap.clone().unwrap_or_default()}
-                        display_type={display_type.clone()} />
-                    }
-                }
+                _ => html! {<AlertIndicator
+                    spritemap={spritemap.clone().unwrap_or_default()}
+                    display_type={display_type.clone()} />
+                },
             }
         } else {
             html! {}
