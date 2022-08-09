@@ -27,14 +27,16 @@ derive_more = { version = "0.99.17", features = ["from"]}
 gloo-timers = "0.2.4"
 
 [features]
-button = []
+button = ["icon"]
 icon = []
 layout = []
-alert = []
+alert = ["layout"]
+badge = []
 full = [
     "button",
     "icon",
     "layout",
     "alert",
+    "badge"
 ]
-default = ["button", "icon", "layout", "alert"]
+default = ["button", "icon", "layout", "alert", "badge"]
