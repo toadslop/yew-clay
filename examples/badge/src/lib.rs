@@ -1,7 +1,10 @@
+use wasm_bindgen::prelude::wasm_bindgen;
 use yew::{html, Component, Context, Html};
 use yew_clay::badge::{BadgeDisplayType, ClayBadge};
 use yew_clay::layout::ClayContainer;
 
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 struct BadgeDemo {}
 
 const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
@@ -29,6 +32,7 @@ impl Component for BadgeDemo {
     }
 }
 
-fn main() {
+#[wasm_bindgen]
+pub fn main() {
     yew::start_app::<BadgeDemo>();
 }

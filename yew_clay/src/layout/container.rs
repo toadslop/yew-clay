@@ -6,7 +6,7 @@ use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, P
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;
 use yew_dom_attributes::props::DomInjector;
 
-use crate::Sizing;
+use super::Sizing;
 
 /// A Yew implementation of ClayContainer. For more info about ClayContainer, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>

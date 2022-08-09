@@ -7,7 +7,7 @@ pub mod inline;
 use crate::inline::InlineAlert;
 pub mod toast_container;
 use crate::toast_container::WithToastContainer;
-
+use wasm_bindgen::prelude::wasm_bindgen;
 struct AlertDemo {}
 
 const SPRITEMAP: &'static str = "static/icons.svg";
@@ -36,6 +36,7 @@ impl Component for AlertDemo {
     }
 }
 
-fn main() {
+#[wasm_bindgen]
+pub fn main() {
     yew::start_app::<AlertDemo>();
 }

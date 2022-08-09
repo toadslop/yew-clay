@@ -13,25 +13,22 @@ license = "Apache-2.0"
 description = "Yew wrapper for Clay Web Components"
 
 [dependencies]
-js-sys = "0.3.58"
-wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"]}
+js-sys = { version ="0.3.58", optional = true }
 yew = "0.19.3"
-web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
-stdweb = "0.4.20"
-strum = { version = "0.24.1", features = ["derive"] }
-strum_macros = "0.24.2"
+strum = { version = "0.24.1", features = ["derive"], optional = true }
+strum_macros = {version = "0.24.2", optional = true }
 yew-dom-attributes = { path = "../../yew-dom-attributes" }
 gloo-events = "0.1.2"
-gloo-console = "0.2.1"
-derive_more = { version = "0.99.17", features = ["from"]}
-gloo-timers = "0.2.4"
+derive_more = { version = "0.99.17", features = ["from"], optional = true}
+gloo-timers = { version = "0.2.4", optional = true }
+web-sys = {version = "0.3.59", features = [], optional = true }
 
 [features]
-button = ["icon"]
+button = ["dep:strum_macros","dep:derive_more"]
 icon = []
-layout = []
-alert = ["layout"]
-badge = []
+layout = ["dep:strum", "dep:strum_macros"]
+alert = ["dep:js-sys", "dep:strum", "dep:gloo-timers", "dep:web-sys"]
+badge = ["dep:strum"]
 full = [
     "button",
     "icon",
@@ -39,4 +36,9 @@ full = [
     "alert",
     "badge"
 ]
-default = ["button", "icon", "layout", "alert", "badge"]
+# default = ["button", "icon", "layout", "alert", "badge"]
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+opt-level = 'z'
+lto = true

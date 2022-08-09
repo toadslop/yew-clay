@@ -2,7 +2,8 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use super::container::ClayContainer;
-use crate::Sizing;
+use super::Sizing;
+
 use gloo_events::EventListener;
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::props::html_element_props::HtmlElementProps;

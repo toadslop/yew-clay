@@ -4,9 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+wasm-bindgen = "0.2.82"
+wee_alloc = "0.4.5"
 yew = "0.19.3"
-yew-clay = { path = "../../yew_clay", features = ["badge"]}
-# domatt = { path = "../../../domatt" }
-# web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
-# yew-dom-attributes = { path = "../../../yew-dom-attributes" }
-# js-sys = "0.3.59"
+yew-clay = { path = "../../yew_clay", features = ["badge", "layout"]}
+
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+opt-level = 'z'
+lto = true
+
+[lib]
+crate-type = ["rlib", "cdylib"]
