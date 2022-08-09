@@ -12,7 +12,6 @@ use gloo_events::EventListener;
 use gloo_timers::callback::Timeout;
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::time::{Duration, Instant};
 use web_sys::MouseEvent;
 use yew::{classes, html, Callback, Component, Context, Html, NodeRef};
 use yew_dom_attributes::props::DomInjector;
@@ -27,8 +26,8 @@ pub struct ClayAlert {
     timer: Option<Timeout>,
     pause_timer: Option<Callback<MouseEvent>>,
     start_timer: Option<Callback<MouseEvent>>,
-    started_time: Option<Instant>,
-    time_to_close: Option<Duration>,
+    started_time: Option<f64>,
+    time_to_close: Option<u32>,
 }
 
 pub enum Msg {

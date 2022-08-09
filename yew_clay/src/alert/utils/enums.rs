@@ -3,7 +3,7 @@ use strum::Display;
 #[derive(Display, Debug, PartialEq, Clone)]
 pub enum AutoCloseValue {
     Boolean(bool),
-    Number(u64),
+    Number(u32),
 }
 
 #[derive(Display, Debug, PartialEq, Clone, Default)]
