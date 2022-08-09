@@ -1,4 +1,4 @@
-use yew::{html, Component, Context, Html};
+use yew::{html, html_nested, Component, Context, Html};
 use yew_clay::{
     alert::{AlertDisplayType, AlertVariant, ClayAlert, ClayAlertFooter},
     button::{ClayButton, ClayButtonGroup},
@@ -58,6 +58,22 @@ impl Component for AlertDemo {
                                 <ClayButton alert={true}>{"View"}</ClayButton>
                             </ClayButtonGroup>
                         </ClayAlertFooter>
+                    </ClayAlert>
+                </ClayContainer>
+
+                <ClayContainer class={CONTAINER_CLASS}>
+                    <h2>{"Inline"}</h2>
+                    <ClayAlert
+                        display_type={AlertDisplayType::Info}
+                        spritemap={SPRITEMAP}
+                        title={"With a Button"}
+                        variant={AlertVariant::Inline}
+                        actions={{html_nested! {
+                            <ClayButtonGroup>
+                                <ClayButton alert={true}>{"View"}</ClayButton>
+                            </ClayButtonGroup>
+                        }}}>
+                        {"This is an alert with a button!"}
                     </ClayAlert>
                 </ClayContainer>
             </>
