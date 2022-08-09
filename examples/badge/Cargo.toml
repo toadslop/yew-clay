@@ -1,0 +1,12 @@
+[package]
+name = "badge"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+yew = "0.19.3"
+yew-clay = { path = "../../yew_clay", features = ["badge"]}
+# domatt = { path = "../../../domatt" }
+# web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
+# yew-dom-attributes = { path = "../../../yew-dom-attributes" }
+# js-sys = "0.3.59"
