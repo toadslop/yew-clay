@@ -1,15 +1,12 @@
-use yew::{html, html_nested, Component, Context, Html};
-use yew_clay::{
-    alert::{AlertDisplayType, AlertVariant, ClayAlert},
-    button::{ClayButton, ClayButtonGroup},
-    layout::ClayContainer,
-};
+use yew::{html, Component, Context, Html};
 pub mod variants;
 use crate::variants::AlertVariantDemo;
 pub mod with_button;
 use crate::with_button::AlertWithButtonDemo;
 pub mod inline;
 use crate::inline::InlineAlert;
+pub mod toast_container;
+use crate::toast_container::WithToastContainer;
 
 struct AlertDemo {}
 
@@ -32,6 +29,8 @@ impl Component for AlertDemo {
                 <AlertWithButtonDemo />
 
                 <InlineAlert />
+
+                <WithToastContainer />
             </>
         }
     }
