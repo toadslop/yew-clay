@@ -24,13 +24,13 @@ pub fn contiditional_container(props: &CondCompProps) -> Html {
 
 #[derive(Properties, PartialEq)]
 pub struct AlertIndicatorProps {
-    pub spritemap: String,
+    pub spritemap: &'static str,
     pub display_type: AlertDisplayType,
 }
 
 #[function_component(AlertIndicator)]
 pub fn alert_indicator(props: &AlertIndicatorProps) -> Html {
-    let spritemap = props.spritemap.clone();
+    let spritemap = props.spritemap;
     let symbol = match &props.display_type {
         AlertDisplayType::Danger => "exclamation-full",
         AlertDisplayType::Info => "info-circle",

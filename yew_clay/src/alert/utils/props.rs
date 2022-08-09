@@ -36,7 +36,7 @@ pub struct ClayAlertProps {
 
     /// Path to the spritemap that Icon should use when referencing symbols.
     #[prop_or_default]
-    pub spritemap: Option<String>,
+    pub spritemap: Option<&'static str>,
 
     /// The summary of the Alert, often is something like 'Error' or 'Info'.
     #[prop_or_default]

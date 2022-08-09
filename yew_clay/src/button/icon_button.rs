@@ -16,7 +16,7 @@ pub struct ButtonWithIconProps {
     /// Path to the spritemap that contains your SVG icons. The default Clay SVGs can be found
     /// here [https://github.com/liferay/clay/blob/master/clayui.com/static/images/icons/icons.svg]
     #[prop_or_default]
-    pub spritemap: String,
+    pub spritemap: &'static str,
 
     /// String identifying the SVG from the spritemap that you want to render.
     #[prop_or_default]
@@ -63,7 +63,7 @@ impl Component for ClayButtonWithIcon {
                 ..button_props
             >
                 <ClayIcon
-                    spritemap={props.spritemap.clone()}
+                    spritemap={props.spritemap}
                     symbol={props.symbol.clone()}
                     node_ref={props.icon_node_ref.clone()}
                     svg_props={props.icon_svg_props.clone()}

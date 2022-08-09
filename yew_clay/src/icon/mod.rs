@@ -20,7 +20,7 @@ pub struct IconProps {
     #[prop_or_default]
     pub class: Classes,
     #[prop_or_default]
-    pub spritemap: String,
+    pub spritemap: &'static str,
     #[prop_or_default]
     pub symbol: String,
     #[prop_or_default]

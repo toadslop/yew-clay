@@ -136,12 +136,12 @@ impl Component for ClayAlert {
         let start_timer = self.start_timer.clone();
         let pause_timer = self.pause_timer.clone();
 
-        let stripe_alert_indicator = gen_stripe_alert(&spritemap, &display_type, &variant);
-        let default_alert_indicator = gen_default_alert(&spritemap, &display_type, &variant);
+        let stripe_alert_indicator = gen_stripe_alert(spritemap, &display_type, &variant);
+        let default_alert_indicator = gen_default_alert(spritemap, &display_type, &variant);
         let title_element = gen_title_element(&title);
         let default_footer_element = gen_default_footer_element(&variant, &actions);
         let inline_footer_element = gen_inline_footer_element(&variant, &actions);
-        let dismiss_button = gen_dismiss_button(show_dismissible, on_close, &spritemap);
+        let dismiss_button = gen_dismiss_button(show_dismissible, on_close, spritemap);
 
         html! {
             <div
