@@ -1,18 +1,23 @@
 use yew::{html, html_nested, Component, Context, Html};
 use yew_clay::{
-    alert::{AlertDisplayType, AlertVariant, ClayAlert, ClayAlertFooter},
+    alert::{AlertDisplayType, AlertVariant, ClayAlert},
     button::{ClayButton, ClayButtonGroup},
     layout::ClayContainer,
 };
+pub mod variants;
+use crate::variants::AlertVariantDemo;
+pub mod with_button;
+use crate::with_button::AlertWithButtonDemo;
+pub mod inline;
+use crate::inline::InlineAlert;
 
-pub enum Msg {}
 struct AlertDemo {}
 
 const SPRITEMAP: &'static str = "static/icons.svg";
 const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
 
 impl Component for AlertDemo {
-    type Message = Msg;
+    type Message = ();
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
@@ -22,60 +27,11 @@ impl Component for AlertDemo {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
             <>
-                <ClayContainer class={CONTAINER_CLASS}>
-                    <h2>{"Variants"}</h2>
-                    <ClayAlert
-                        display_type={AlertDisplayType::Info}
-                        spritemap={SPRITEMAP}
-                        title={"Info"}>
-                        {"This is a default alert"}
-                    </ClayAlert>
-                    <ClayAlert
-                        display_type={AlertDisplayType::Warning}
-                        spritemap={SPRITEMAP}
-                        title={"Warning"}
-                        variant={AlertVariant::Stripe}>
-                        {"This is a stripe alert"}
-                    </ClayAlert>
-                    <div class={"c-mt-3"}>
-                        <ClayAlert
-                            display_type={AlertDisplayType::Danger}
-                            spritemap={SPRITEMAP}
-                            title={"Error Indicator"}
-                            variant={AlertVariant::Feedback} />
-                    </div>
-                </ClayContainer>
+                <AlertVariantDemo />
 
-                <ClayContainer class={CONTAINER_CLASS}>
-                    <h2>{"Using with ClayButton"}</h2>
-                    <ClayAlert
-                        display_type={AlertDisplayType::Info}
-                        spritemap={SPRITEMAP}
-                        title={"With a Button"}>
-                        {"This is an alert with a button!"}
-                        <ClayAlertFooter>
-                            <ClayButtonGroup>
-                                <ClayButton alert={true}>{"View"}</ClayButton>
-                            </ClayButtonGroup>
-                        </ClayAlertFooter>
-                    </ClayAlert>
-                </ClayContainer>
+                <AlertWithButtonDemo />
 
-                <ClayContainer class={CONTAINER_CLASS}>
-                    <h2>{"Inline"}</h2>
-                    <ClayAlert
-                        display_type={AlertDisplayType::Info}
-                        spritemap={SPRITEMAP}
-                        title={"With a Button"}
-                        variant={AlertVariant::Inline}
-                        actions={{html_nested! {
-                            <ClayButtonGroup>
-                                <ClayButton alert={true}>{"View"}</ClayButton>
-                            </ClayButtonGroup>
-                        }}}>
-                        {"This is an alert with a button!"}
-                    </ClayAlert>
-                </ClayContainer>
+                <InlineAlert />
             </>
         }
     }
