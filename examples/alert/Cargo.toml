@@ -11,4 +11,4 @@ domatt = { path = "../../../domatt" }
 yew = "0.19.3"
 web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
 yew-dom-attributes = { path = "../../../yew-dom-attributes" }
-stylist = {version = "0.10.1", features =[] }
+js-sys = "0.3.59"
