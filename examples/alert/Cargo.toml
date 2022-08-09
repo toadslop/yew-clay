@@ -6,4 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-yew-clay = { path = "../../yew_clay"}
+yew-clay = { path = "../../yew_clay", features = ["alert", "layout"]}
+domatt = { path = "../../../domatt" }
+yew = "0.19.3"
+web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
+yew-dom-attributes = { path = "../../../yew-dom-attributes" }
+stylist = {version = "0.10.1", features =[] }
