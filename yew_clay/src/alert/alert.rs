@@ -1,10 +1,12 @@
 use super::utils::autoclose_timer::{
     close, get_time_to_close, initialize_autoclose_callbacks, pause, start,
 };
-use super::utils::sub_components::AlertIndicator;
-use super::{AlertDisplayType, AlertVariant, ClayAlertFooter, ClayAlertProps};
+use super::utils::element_generators::{
+    gen_default_alert, gen_default_footer_element, gen_dismiss_button, gen_inline_footer_element,
+    gen_stripe_alert, gen_title_element,
+};
+use super::{AlertDisplayType, AlertVariant, ClayAlertProps};
 use crate::alert::utils::sub_components::ConditionalContainer;
-use crate::icon::ClayIcon;
 use crate::layout::{ClayContentCol, ClayContentRow, ClayContentSection};
 use gloo_events::EventListener;
 use gloo_timers::callback::Timeout;
@@ -134,76 +136,12 @@ impl Component for ClayAlert {
         let start_timer = self.start_timer.clone();
         let pause_timer = self.pause_timer.clone();
 
-        let stripe_alert = html! {
-            <ClayContentCol>
-                <ClayContentSection>
-                    <AlertIndicator
-                        spritemap={spritemap.clone().unwrap_or_default()}
-                        display_type={display_type.clone()} />
-                </ClayContentSection>
-            </ClayContentCol>
-        };
-        let stripe_alert_indicator = if let Some(variant) = variant.as_ref() {
-            match variant {
-                AlertVariant::Stripe => stripe_alert,
-                _ => html! {},
-            }
-        } else {
-            stripe_alert
-        };
-
-        let default_alert_indicator = if let Some(variant) = variant.as_ref() {
-            match variant {
-                AlertVariant::Stripe => html! {},
-                _ => html! {<AlertIndicator
-                    spritemap={spritemap.clone().unwrap_or_default()}
-                    display_type={display_type.clone()} />
-                },
-            }
-        } else {
-            html! {}
-        };
-
-        let title_element = if let Some(title) = title {
-            html! {<strong class={"lead"}>{title}</strong>}
-        } else {
-            html! {}
-        };
-
-        let default_footer_element = if let Some(variant) = &variant {
-            if *variant != AlertVariant::Inline && actions.is_some() {
-                html! { <ClayAlertFooter>{actions.clone().unwrap()}</ClayAlertFooter>}
-            } else {
-                html! {}
-            }
-        } else {
-            html! {}
-        };
-
-        let inline_footer_element = if let Some(variant) = &variant {
-            if *variant == AlertVariant::Inline && actions.is_some() {
-                html! {
-                <ClayContentCol>
-                    <ClayContentSection>
-                        {actions.unwrap()}
-                    </ClayContentSection>
-                </ClayContentCol>}
-            } else {
-                html! {}
-            }
-        } else {
-            html! {}
-        };
-
-        let dismiss_button = if show_dismissible {
-            html! {
-                <button aria-label={"Close"} class={"close"} onclick={on_close} type="button">
-                    <ClayIcon spritemap={spritemap.unwrap_or_default()} symbol={"times"} />
-                </button>
-            }
-        } else {
-            html! {}
-        };
+        let stripe_alert_indicator = gen_stripe_alert(&spritemap, &display_type, &variant);
+        let default_alert_indicator = gen_default_alert(&spritemap, &display_type, &variant);
+        let title_element = gen_title_element(&title);
+        let default_footer_element = gen_default_footer_element(&variant, &actions);
+        let inline_footer_element = gen_inline_footer_element(&variant, &actions);
+        let dismiss_button = gen_dismiss_button(show_dismissible, on_close, &spritemap);
 
         html! {
             <div
