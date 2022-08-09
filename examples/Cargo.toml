@@ -4,5 +4,6 @@ members = [
 ]
 exclude = [
     "target",
-    ".cargo"
+    ".cargo",
+    "static"
 ]
