@@ -24,14 +24,15 @@ pub fn contiditional_container(props: &CondCompProps) -> Html {
 
 #[derive(Properties, PartialEq)]
 pub struct AlertIndicatorProps {
-    pub spritemap: Option<String>,
-    pub display_type: Option<AlertDisplayType>,
+    pub spritemap: String,
+    pub display_type: AlertDisplayType,
 }
 
 #[function_component(AlertIndicator)]
 pub fn alert_indicator(props: &AlertIndicatorProps) -> Html {
-    let spritemap = props.spritemap.clone().unwrap_or_default();
-    let symbol = match props.display_type.clone().unwrap_or_default() {
+    let spritemap = props.spritemap.clone();
+    gloo_console::info!(props.display_type.to_string());
+    let symbol = match &props.display_type {
         AlertDisplayType::Danger => "exclamation-full",
         AlertDisplayType::Info => "info-circle",
         AlertDisplayType::Success => "check-circle-full",

@@ -38,13 +38,9 @@ pub enum Msg {
 impl ClayAlert {
     fn get_show_dismissible(
         on_close: &Option<Callback<MouseEvent>>,
-        hide_close_icon: Option<bool>,
+        hide_close_icon: bool,
     ) -> bool {
-        if let Some(hide_close_icon) = hide_close_icon {
-            return on_close.is_some() && !hide_close_icon;
-        }
-
-        true
+        on_close.is_some() && !hide_close_icon
     }
 
     fn get_dismissible_class(show_dismissible: bool) -> Option<String> {
@@ -66,8 +62,8 @@ impl ClayAlert {
         }
     }
 
-    fn get_display_class(display_type: AlertDisplayType) -> Option<String> {
-        Some(format!("`alert-{}", display_type))
+    fn get_display_class(display_type: &AlertDisplayType) -> Option<String> {
+        Some(format!("alert-{}", display_type))
     }
 }
 
@@ -133,30 +129,42 @@ impl Component for ClayAlert {
         let show_dismissible = Self::get_show_dismissible(&on_close, hide_close_icon);
         let dismissible_class = Self::get_dismissible_class(show_dismissible);
         let variant_class = Self::get_variant_class(&variant);
-        let display_class = Self::get_display_class(display_type);
+        let display_class = Self::get_display_class(&display_type);
 
         let start_timer = self.start_timer.clone();
         let pause_timer = self.pause_timer.clone();
 
+        let stripe_alert = html! {
+            <ClayContentCol>
+                <ClayContentSection>
+                    <AlertIndicator
+                        spritemap={spritemap.clone().unwrap_or_default()}
+                        display_type={display_type.clone()} />
+                </ClayContentSection>
+            </ClayContentCol>
+        };
         let stripe_alert_indicator = if let Some(variant) = variant.as_ref() {
             match variant {
-                AlertVariant::Stripe => html! {
-                    <ClayContentCol>
-                        <ClayContentSection>
-                            <AlertIndicator spritemap={spritemap.clone()} />
-                        </ClayContentSection>
-                    </ClayContentCol>
-                },
+                AlertVariant::Stripe => {
+                    gloo_console::log!("Strip alert indicator");
+                    stripe_alert
+                }
                 _ => html! {},
             }
         } else {
-            html! {}
+            stripe_alert
         };
 
         let default_alert_indicator = if let Some(variant) = variant.as_ref() {
             match variant {
                 AlertVariant::Stripe => html! {},
-                _ => html! {<AlertIndicator spritemap={spritemap.clone()} />},
+                _ => {
+                    gloo_console::log!("Default alert indicator");
+                    html! {<AlertIndicator
+                        spritemap={spritemap.clone().unwrap_or_default()}
+                        display_type={display_type.clone()} />
+                    }
+                }
             }
         } else {
             html! {}

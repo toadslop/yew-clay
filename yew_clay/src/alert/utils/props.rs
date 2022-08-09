@@ -31,8 +31,8 @@ pub struct ClayAlertProps {
 
     /// Flag to indicate if close icon should be show. This prop is used in
     /// conjunction with the `onClose`prop;
-    #[prop_or_default]
-    pub hide_close_icon: Option<bool>,
+    #[prop_or(false)]
+    pub hide_close_icon: bool,
 
     /// Path to the spritemap that Icon should use when referencing symbols.
     #[prop_or_default]
