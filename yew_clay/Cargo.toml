@@ -8,7 +8,7 @@ repository = "tbd"
 homepage = "tbd"
 keywords = ["clayui", "yew", "wasm"]
 categories = ["web-programming", "wasm", "api-bindings", "gui"]
-# include = ["src/**/*", "Cargo.toml", "build"]
+include = ["src/**/*", "Cargo.toml"]
 license = "Apache-2.0"
 description = "Yew wrapper for Clay Web Components"
 
@@ -20,14 +20,14 @@ strum_macros = {version = "0.24.2", optional = true }
 yew-dom-attributes = { path = "../../yew-dom-attributes" }
 gloo-events = "0.1.2"
 derive_more = { version = "0.99.17", features = ["from"], optional = true}
-gloo-timers = { version = "0.2.4", optional = true }
-web-sys = {version = "0.3.59", features = [], optional = true }
+web-sys = {version = "0.3.59", features = ["Window"], optional = true }
+wasm-bindgen = "0.2.82"
 
 [features]
 button = ["dep:strum_macros","dep:derive_more"]
 icon = []
 layout = ["dep:strum", "dep:strum_macros"]
-alert = ["dep:js-sys", "dep:strum", "dep:gloo-timers", "dep:web-sys"]
+alert = ["dep:js-sys", "dep:strum", "dep:web-sys"]
 badge = ["dep:strum"]
 full = [
     "button",
@@ -37,8 +37,4 @@ full = [
     "badge"
 ]
 # default = ["button", "icon", "layout", "alert", "badge"]
-[profile.release]
-panic = 'abort'
-codegen-units = 1
-opt-level = 'z'
-lto = true
+

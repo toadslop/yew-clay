@@ -1,4 +1,4 @@
-use gloo_timers::callback::Timeout;
+use wasm_bindgen::{prelude::Closure, JsCast};
 use web_sys::MouseEvent;
 use yew::{Callback, Context};
 
@@ -12,15 +12,19 @@ pub fn close(ctx: &Context<ClayAlert>) {
 }
 
 pub fn pause(
-    timer: Option<Timeout>,
+    time_id: Option<i32>,
     time_to_close: &Option<u32>,
     started_time: &Option<f64>,
 ) -> Option<u32> {
-    if timer.is_some() && time_to_close.is_some() {
-        timer.unwrap().cancel();
+    if time_id.is_some() && time_to_close.is_some() {
+        web_sys::window()
+            .unwrap()
+            .clear_timeout_with_handle(time_id.unwrap());
+
         let time_to_close = time_to_close.unwrap();
         let started_time = started_time.unwrap_or(0.0);
         let time_to_close = (time_to_close) - (js_sys::Date::now() - started_time) as u32;
+
         if time_to_close > 0 {
             return Some(time_to_close);
         }
@@ -31,16 +35,23 @@ pub fn pause(
 pub fn start(
     time_to_close: &Option<u32>,
     ctx: &Context<ClayAlert>,
-) -> Option<(Option<f64>, Option<Timeout>)> {
+) -> Option<(Option<f64>, Option<i32>)> {
     if let Some(time_to_close) = time_to_close {
         let started_time = Some(js_sys::Date::now());
-        let timer = {
-            let link = ctx.link().clone();
-            Some(Timeout::new(*time_to_close, move || {
-                link.send_message(Msg::Close)
-            }))
-        };
-        return Some((started_time, timer));
+        let link = ctx.link().clone();
+        let callback = Closure::<dyn Fn()>::new(move || link.send_message(Msg::Close));
+
+        let time_id = web_sys::window()
+            .unwrap()
+            .set_timeout_with_callback_and_timeout_and_arguments_0(
+                callback.as_ref().unchecked_ref(),
+                *time_to_close as i32,
+            )
+            .unwrap();
+
+        callback.forget();
+
+        return Some((started_time, Some(time_id)));
     }
     None
 }

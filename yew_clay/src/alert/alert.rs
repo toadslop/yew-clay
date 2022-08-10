@@ -9,7 +9,6 @@ use super::{AlertDisplayType, AlertVariant, ClayAlertProps};
 use crate::alert::utils::sub_components::ConditionalContainer;
 use crate::layout::{ClayContentCol, ClayContentRow, ClayContentSection};
 use gloo_events::EventListener;
-use gloo_timers::callback::Timeout;
 use std::collections::HashMap;
 use std::rc::Rc;
 use web_sys::MouseEvent;
@@ -23,7 +22,7 @@ pub struct ClayAlert {
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
     listeners: HashMap<String, EventListener>,
-    timer: Option<Timeout>,
+    timer_id: Option<i32>,
     pause_timer: Option<Callback<MouseEvent>>,
     start_timer: Option<Callback<MouseEvent>>,
     started_time: Option<f64>,
@@ -81,7 +80,7 @@ impl Component for ClayAlert {
         Self {
             node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
-            timer: None,
+            timer_id: None,
             start_timer,
             pause_timer,
             started_time: None,
@@ -96,15 +95,18 @@ impl Component for ClayAlert {
                 true
             }
             Msg::PauseTimer => {
-                self.time_to_close =
-                    pause(self.timer.take(), &self.time_to_close, &self.started_time);
+                self.time_to_close = pause(
+                    self.timer_id.take(),
+                    &self.time_to_close,
+                    &self.started_time,
+                );
                 false
             }
             Msg::StartTimer => {
                 let maybe_start = start(&self.time_to_close, ctx);
-                if let Some((started_time, timer)) = maybe_start {
+                if let Some((started_time, handler)) = maybe_start {
                     self.started_time = started_time;
-                    self.timer = timer;
+                    self.timer_id = handler;
                 }
 
                 false
