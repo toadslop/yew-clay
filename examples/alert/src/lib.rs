@@ -1,17 +1,29 @@
-use yew::{html, Component, Context, Html};
-pub mod variants;
-use crate::variants::AlertVariantDemo;
-pub mod with_button;
-use crate::with_button::AlertWithButtonDemo;
-pub mod inline;
-use crate::inline::InlineAlert;
-pub mod toast_container;
-use crate::toast_container::WithToastContainer;
-use wasm_bindgen::prelude::wasm_bindgen;
-struct AlertDemo {}
+#![recursion_limit = "512"]
 
-const SPRITEMAP: &'static str = "static/icons.svg";
+pub mod inline;
+pub mod toast_container;
+pub mod variants;
+pub mod with_button;
+
+use crate::inline::InlineAlert;
+use crate::toast_container::WithToastContainer;
+use crate::variants::AlertVariantDemo;
+use crate::with_button::AlertWithButtonDemo;
+use wasm_bindgen::prelude::*;
+use yew::html;
+use yew::Component;
+use yew::Context;
+use yew::Html;
+
+const SPRITEMAP: &'static str = "/icons.svg";
 const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+pub struct AlertDemo {}
 
 impl Component for AlertDemo {
     type Message = ();
@@ -36,7 +48,10 @@ impl Component for AlertDemo {
     }
 }
 
+// This is the entry point for the web app
 #[wasm_bindgen]
-pub fn main() {
+pub fn run_app() -> Result<(), JsValue> {
+    wasm_logger::init(wasm_logger::Config::default());
     yew::start_app::<AlertDemo>();
+    Ok(())
 }

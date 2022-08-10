@@ -9,11 +9,5 @@ wee_alloc = "0.4.5"
 yew = "0.19.3"
 yew-clay = { path = "../../yew_clay", features = ["badge", "layout"]}
 
-[profile.release]
-panic = 'abort'
-codegen-units = 1
-opt-level = 'z'
-lto = true
-
 [lib]
 crate-type = ["rlib", "cdylib"]
