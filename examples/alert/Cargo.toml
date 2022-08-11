@@ -3,6 +3,10 @@ name = "yew-clay-alert-example"
 version = "0.1.0"
 authors = ["toadslop <bnheise@gmail.com"]
 edition = "2021"
+readme = "./README.md"
+description = "An example of how to use the Yew Clay component library's alert component."
+repository = "https://github.com/toadslop/yew-clay"
+license = "MIT OR Apache-2.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -18,6 +22,3 @@ yew-dom-attributes = { path = "../../../yew-dom-attributes" }
 js-sys = "0.3.59"
 wasm-bindgen = {version = "0.2.82", features = ["std"]}
 wee_alloc = "0.4.5"
-
-[dev-dependencies]
-wasm-bindgen-test = "0.3"
