@@ -18,8 +18,6 @@ use yew::Html;
 const SPRITEMAP: &'static str = "/icons.svg";
 const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
@@ -51,7 +49,6 @@ impl Component for AlertDemo {
 // This is the entry point for the web app
 #[wasm_bindgen]
 pub fn run_app() -> Result<(), JsValue> {
-    wasm_logger::init(wasm_logger::Config::default());
     yew::start_app::<AlertDemo>();
     Ok(())
 }

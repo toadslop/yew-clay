@@ -36,5 +36,5 @@ full = [
     "alert",
     "badge"
 ]
-# default = ["button", "icon", "layout", "alert", "badge"]
+default = ["button", "icon", "layout", "alert", "badge"]
 

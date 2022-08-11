@@ -1,19 +1,15 @@
 [package]
-name = "yew-wasm-pack-template"
-version = "0.2.0"
-authors = ["Yew Maintainers <maintainers@yew.rs"]
+name = "yew-clay-alert-example"
+version = "0.1.0"
+authors = ["toadslop <bnheise@gmail.com"]
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-log = "0.4"
 strum = "0.19"
 strum_macros = "0.19"
-serde = "1"
-serde_derive = "1"
-wasm-logger = "0.2"
 yew-clay = { path = "../../yew_clay", features = ["alert", "layout", "icon", "button"]}
 domatt = { path = "../../../domatt" }
 yew = "0.19.3"
@@ -22,7 +18,6 @@ yew-dom-attributes = { path = "../../../yew-dom-attributes" }
 js-sys = "0.3.59"
 wasm-bindgen = {version = "0.2.82", features = ["std"]}
 wee_alloc = "0.4.5"
-gloo-console = "0.2.1"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
