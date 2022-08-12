@@ -21,7 +21,7 @@ pub struct ClayAlert {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
-    listeners: HashMap<String, EventListener>,
+    listeners: HashMap<String, Rc<EventListener>>,
     timer_id: Option<i32>,
     pause_timer: Option<Callback<MouseEvent>>,
     start_timer: Option<Callback<MouseEvent>>,
@@ -115,7 +115,6 @@ impl Component for ClayAlert {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
         let ClayAlertProps {
             class,
             children,
@@ -127,7 +126,7 @@ impl Component for ClayAlert {
             title,
             actions,
             ..
-        } = props;
+        } = ctx.props().clone();
 
         let show_dismissible = Self::get_show_dismissible(&on_close, hide_close_icon);
         let dismissible_class = Self::get_dismissible_class(show_dismissible);

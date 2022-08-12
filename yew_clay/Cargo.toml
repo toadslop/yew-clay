@@ -20,8 +20,10 @@ strum_macros = {version = "0.24.2", optional = true }
 yew-dom-attributes = { path = "../../yew-dom-attributes" }
 gloo-events = "0.1.2"
 derive_more = { version = "0.99.17", features = ["from"], optional = true}
-web-sys = {version = "0.3.59", features = ["Window"], optional = true }
+web-sys = {version = "0.3.59", features = ["Window", "MouseEvent"], optional = true }
 wasm-bindgen = "0.2.82"
+domatt = { path = "../../domatt", optional = true }
+gloo-console = "0.2.1"
 
 [features]
 button = ["dep:strum_macros","dep:derive_more"]
@@ -29,12 +31,16 @@ icon = []
 layout = ["dep:strum", "dep:strum_macros"]
 alert = ["dep:js-sys", "dep:strum", "dep:web-sys"]
 badge = ["dep:strum"]
+breadcrumb = []
+link = ["domatt/anchor_html_attributes"]
 full = [
     "button",
     "icon",
     "layout",
     "alert",
-    "badge"
+    "badge",
+    "breadcrumb",
+    "link"
 ]
-default = ["button", "icon", "layout", "alert", "badge"]
+default = ["button", "icon", "layout", "alert", "badge", "breadcrumb", "link"]
 
