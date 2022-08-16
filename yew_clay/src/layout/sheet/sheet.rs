@@ -10,7 +10,7 @@ pub struct ClaySheet {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, EventListener>,
+    listeners: HashMap<String, Rc<EventListener>>,
 }
 
 /// A generic set of props for container elements.

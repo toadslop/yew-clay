@@ -1,17 +1,35 @@
+mod button;
 #[cfg(feature = "button")]
-pub mod button;
+pub use button::*;
 
+<<<<<<< HEAD
 // #[cfg(feature = "icon")]
 // pub mod icon;
+=======
+mod icon;
+#[cfg(feature = "icon")]
+pub use icon::*;
+>>>>>>> main
 
+mod layout;
 #[cfg(feature = "layout")]
-pub mod layout;
+pub use layout::*;
 
+mod alert;
 #[cfg(feature = "alert")]
-pub mod alert;
+pub use alert::*;
 
+mod badge;
 #[cfg(feature = "badge")]
-pub mod badge;
+pub use badge::*;
+
+mod breadcrumb;
+#[cfg(feature = "breadcrumb")]
+pub use breadcrumb::*;
+
+mod link;
+#[cfg(feature = "link")]
+pub use link::*;
 
 trait HasBoolClass {
     fn get_bool_class(&self, boolean: Option<bool>, class_name: &'static str) -> Option<String> {

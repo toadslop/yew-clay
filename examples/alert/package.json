@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --mode development --open",
-    "prod": "pnpm run build && cd dist && wasm-server",
+    "dev": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "build:dev": "webpack --mode development"
+    "build:dev": "webpack --mode development",
+    "prod": "pnpm run build && cd dist && wasm-server"
   },
   "devDependencies": {
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",

@@ -13,8 +13,8 @@ module.exports = (_env, argv) => {
     entry: "./bootstrap.js",
     output: {
       path: distPath,
-      filename: "badge.js",
-      webassemblyModuleFilename: "badge.wasm",
+      filename: "alert.js",
+      webassemblyModuleFilename: "alert.wasm",
     },
     module: {
       rules: [

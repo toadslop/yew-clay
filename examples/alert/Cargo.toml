@@ -1,11 +1,19 @@
 [package]
-name = "alert"
+name = "yew-clay-alert-example"
 version = "0.1.0"
+authors = ["toadslop <bnheise@gmail.com"]
 edition = "2021"
+readme = "./README.md"
+description = "An example of how to use the Yew Clay component library's alert component."
+repository = "https://github.com/toadslop/yew-clay"
+license = "MIT OR Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+strum = "0.19"
+strum_macros = "0.19"
 yew-clay = { path = "../../yew_clay", features = ["alert", "layout", "icon", "button"]}
 domatt = { path = "../../../domatt" }
 yew = "0.19.3"
@@ -13,12 +21,4 @@ web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
 yew-dom-attributes = { path = "../../../yew-dom-attributes" }
 js-sys = "0.3.59"
 wasm-bindgen = {version = "0.2.82", features = ["std"]}
-
-[profile.release]
-panic = 'abort'
-codegen-units = 1
-opt-level = 'z'
-lto = true
-
-[lib]
-crate-type = ["rlib", "cdylib"]
+wee_alloc = "0.4.5"

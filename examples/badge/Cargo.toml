@@ -1,19 +1,18 @@
 [package]
-name = "badge"
+name = "yew-clay-badge-example"
 version = "0.1.0"
+authors = ["toadslop <bnheise@gmail.com"]
 edition = "2021"
+readme = "./README.md"
+description = "An example of how to use the Yew Clay component library's badge component."
+repository = "https://github.com/toadslop/yew-clay"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 wasm-bindgen = "0.2.82"
 wee_alloc = "0.4.5"
 yew = "0.19.3"
 yew-clay = { path = "../../yew_clay", features = ["badge", "layout"]}
-
-[profile.release]
-panic = 'abort'
-codegen-units = 1
-opt-level = 'z'
-lto = true
 
 [lib]
 crate-type = ["rlib", "cdylib"]

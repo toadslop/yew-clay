@@ -10,7 +10,7 @@ pub struct ClayToastContainer {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
-    listeners: HashMap<String, EventListener>,
+    listeners: HashMap<String, Rc<EventListener>>,
 }
 
 /// Props for ClayToastContainer. For details, check the docs:

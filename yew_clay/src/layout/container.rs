@@ -12,7 +12,7 @@ pub struct ClayContainer {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, EventListener>,
+    listeners: HashMap<String, Rc<EventListener>>,
 }
 
 /// Props for ClayContainer. For details, check the docs:
