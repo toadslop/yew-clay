@@ -32,7 +32,7 @@ layout = ["dep:strum", "dep:strum_macros"]
 alert = ["dep:js-sys", "dep:strum", "dep:web-sys"]
 badge = ["dep:strum"]
 breadcrumb = []
-link = ["domatt/anchor_html_attributes"]
+link = ["domatt/anchor"]
 full = [
     "button",
     "icon",
@@ -43,6 +43,7 @@ full = [
     "link"
 ]
 default = ["button", "icon", "layout", "alert", "badge"]
+
 [profile.release]
 panic = 'abort'
 codegen-units = 1

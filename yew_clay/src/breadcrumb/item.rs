@@ -5,7 +5,7 @@ use web_sys::MouseEvent;
 use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
 };
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
+use yew_dom_attributes::props::global_props::GlobalProps;
 use yew_dom_attributes::props::DomInjector;
 
 pub struct ClayItem {
@@ -46,7 +46,7 @@ pub struct ClayItemProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<HtmlElementProps>>,
+    pub html_props: Option<Rc<GlobalProps>>,
 }
 
 pub enum Msg {}

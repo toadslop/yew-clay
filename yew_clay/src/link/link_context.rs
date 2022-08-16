@@ -2,7 +2,6 @@ use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::anchor_props::AnchorProps;
 use yew_dom_attributes::props::DomInjector;
 
 pub trait LinkContext {

@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::wasm_bindgen;
 use yew::{html, Component, Context, Html};
-use yew_clay::badge::{BadgeDisplayType, ClayBadge};
-use yew_clay::layout::ClayContainer;
+use yew_clay::ClayContainer;
+use yew_clay::{BadgeDisplayType, ClayBadge};
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;

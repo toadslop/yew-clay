@@ -1,8 +1,8 @@
 use crate::{CONTAINER_CLASS, SPRITEMAP};
 use yew::{html, Component, Context, Html};
-use yew_clay::alert::ClayToastContainer;
-use yew_clay::alert::{AutoCloseValue, ClayAlert};
-use yew_clay::layout::ClayContainer;
+use yew_clay::ClayContainer;
+use yew_clay::ClayToastContainer;
+use yew_clay::{AutoCloseValue, ClayAlert};
 
 pub struct WithToastContainer {
     toast_items: Vec<f64>,

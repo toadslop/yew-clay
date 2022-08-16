@@ -1,9 +1,8 @@
-use std::{collections::HashMap, rc::Rc};
-use yew_dom_attributes::props::DomInjector;
-
 use gloo_events::EventListener;
+use std::{collections::HashMap, rc::Rc};
 use yew::{classes, html, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::svg_props::SVGProps;
+use yew_dom_attributes::props::svg_props::SvgProps;
+use yew_dom_attributes::props::DomInjector;
 
 /// A Yew implementation of ClayIcon.
 pub struct ClayIcon {
@@ -24,12 +23,10 @@ pub struct IconProps {
     #[prop_or_default]
     pub symbol: String,
     #[prop_or_default]
-    pub svg_props: Option<SVGProps>,
-    #[prop_or_default]
     pub node_ref: NodeRef,
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub svg_html_attributes: Option<Rc<SVGProps>>,
+    pub svg_html_attributes: Option<Rc<SvgProps>>,
 }
 
 impl Component for ClayIcon {
