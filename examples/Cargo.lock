@@ -65,12 +65,8 @@ dependencies = [
 name = "domatt"
 version = "0.1.0"
 dependencies = [
-<<<<<<< HEAD
  "gloo-console",
- "strum",
-=======
  "strum 0.24.1",
->>>>>>> main
  "url",
  "web-sys",
 ]
@@ -675,6 +671,7 @@ name = "yew-clay"
 version = "0.1.0"
 dependencies = [
  "derive_more",
+ "gloo-console",
  "gloo-events",
  "js-sys",
  "strum 0.24.1",

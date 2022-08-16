@@ -2,14 +2,8 @@ mod button;
 #[cfg(feature = "button")]
 pub use button::*;
 
-<<<<<<< HEAD
 // #[cfg(feature = "icon")]
 // pub mod icon;
-=======
-mod icon;
-#[cfg(feature = "icon")]
-pub use icon::*;
->>>>>>> main
 
 mod layout;
 #[cfg(feature = "layout")]

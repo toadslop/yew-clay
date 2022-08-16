@@ -42,14 +42,9 @@ full = [
     "breadcrumb",
     "link"
 ]
-<<<<<<< HEAD
 default = ["button", "icon", "layout", "alert", "badge"]
 [profile.release]
 panic = 'abort'
 codegen-units = 1
 opt-level = 'z'
 lto = true
-=======
-default = ["button", "icon", "layout", "alert", "badge", "breadcrumb", "link"]
-
->>>>>>> main
