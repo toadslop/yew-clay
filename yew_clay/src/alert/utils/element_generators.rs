@@ -3,7 +3,7 @@ use crate::alert::AlertDisplayType;
 use crate::alert::AlertVariant;
 use crate::alert::ClayAlertFooter;
 use crate::button::ClayButtonGroup;
-use crate::icon::ClayIcon;
+// use crate::icon::ClayIcon;
 use crate::layout::ClayContentCol;
 use crate::layout::ClayContentSection;
 use web_sys::MouseEvent;
@@ -100,7 +100,7 @@ pub fn gen_dismiss_button(
     if show_dismissible {
         html! {
             <button aria-label={"Close"} class={"close"} onclick={on_close} type="button">
-                <ClayIcon spritemap={spritemap.unwrap_or_default()} symbol={"times"} />
+                // <ClayIcon spritemap={spritemap.unwrap_or_default()} symbol={"times"} />
             </button>
         }
     } else {

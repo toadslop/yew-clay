@@ -2,7 +2,8 @@ use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::{html_element_props::HtmlElementProps, DomInjector};
+use yew_dom_attributes::props::global_props::GlobalProps;
+use yew_dom_attributes::props::DomInjector;
 
 /// A Yew implementation of ClayAlertFooter.
 pub struct ClayAlertFooter {
@@ -27,7 +28,7 @@ pub struct ClayAlertFooterProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<HtmlElementProps>>,
+    pub html_props: Option<Rc<GlobalProps>>,
 }
 
 impl Component for ClayAlertFooter {

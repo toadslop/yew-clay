@@ -1,10 +1,9 @@
+use super::enums::{AlertDisplayType, AlertVariant, AutoCloseValue};
 use crate::button::ClayButtonGroup;
 use std::rc::Rc;
 use web_sys::MouseEvent;
 use yew::{virtual_dom::VChild, Callback, Children, Classes, NodeRef, Properties};
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
-
-use super::enums::{AlertDisplayType, AlertVariant, AutoCloseValue};
+use yew_dom_attributes::props::global_props::GlobalProps;
 
 /// Props for ClayAlert. For details, check the docs:
 /// <https://clayui.com/docs/components/alert/api.html#alert>
@@ -57,5 +56,5 @@ pub struct ClayAlertProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<HtmlElementProps>>,
+    pub html_props: Option<Rc<GlobalProps>>,
 }

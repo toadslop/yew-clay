@@ -1,5 +1,5 @@
 use super::enums::{AlertDisplayType, AlertVariant};
-use crate::icon::ClayIcon;
+// use crate::icon::ClayIcon;
 use yew::{function_component, html, Children, Properties};
 
 #[derive(Properties, PartialEq)]
@@ -39,7 +39,7 @@ pub fn alert_indicator(props: &AlertIndicatorProps) -> Html {
     };
     html! {
         <span class={"alert-indicator"}>
-            <ClayIcon {spritemap} {symbol} />
+            // <ClayIcon {spritemap} {symbol} />
         </span>
     }
 }

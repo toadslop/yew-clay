@@ -1,10 +1,9 @@
+use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-
-use gloo_events::EventListener;
 use strum::Display;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
+use yew_dom_attributes::props::global_props::GlobalProps;
 use yew_dom_attributes::props::DomInjector;
 
 /// A Yew implementation of ClayBadge. For more info, check the documentation:
@@ -39,7 +38,7 @@ pub struct ClayBadgeProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub button_html_attributes: Option<Rc<HtmlElementProps>>,
+    pub button_html_attributes: Option<Rc<GlobalProps>>,
 }
 
 impl ClayBadge {
