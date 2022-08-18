@@ -22,3 +22,4 @@ yew-dom-attributes = { path = "../../../yew-dom-attributes" }
 js-sys = "0.3.59"
 wasm-bindgen = {version = "0.2.82", features = ["std"]}
 wee_alloc = "0.4.5"
+gloo-events = "0.1.2"

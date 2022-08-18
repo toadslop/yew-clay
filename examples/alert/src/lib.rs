@@ -1,4 +1,5 @@
 #![recursion_limit = "512"]
+#![deny(elided_lifetimes_in_paths)]
 
 pub mod inline;
 pub mod toast_container;
@@ -19,7 +20,7 @@ const SPRITEMAP: &'static str = "/icons.svg";
 const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
 
 #[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+static ALLOC: wee_alloc::WeeAlloc<'_> = wee_alloc::WeeAlloc::INIT;
 
 pub struct AlertDemo {}
 
