@@ -1,6 +1,6 @@
 use std::rc::Rc;
 use yew::{Children, Classes, NodeRef, Properties};
-use yew_dom_attributes::props::global_props::GlobalProps;
+use yew_dom_attributes::global_props::GlobalProps;
 
 mod sheet;
 pub use sheet::*;

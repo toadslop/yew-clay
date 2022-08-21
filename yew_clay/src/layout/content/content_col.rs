@@ -3,8 +3,8 @@ use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::global_props::GlobalProps;
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::global_props::GlobalProps;
+use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClayContentCol. For more info about ClayContentCol, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>

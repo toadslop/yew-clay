@@ -1,9 +1,10 @@
+use std::rc::Rc;
+
 use super::button::ClayButton;
+use super::ClayButtonProps;
 use crate::icon::ClayIcon;
 use yew::{html, Component, Context, NodeRef, Properties};
-use yew_dom_attributes::props::svg_props::SVGProps;
-
-use super::ClayButtonProps;
+use yew_dom_attributes::svg_props::SvgProps;
 
 /// A Yew implementation of ClayButtonWithIcon. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html#icon]
@@ -28,7 +29,7 @@ pub struct ButtonWithIconProps {
 
     /// Props to be passed down to the underlying SVG of the icon.
     #[prop_or_default]
-    pub icon_svg_props: Option<SVGProps>,
+    pub icon_svg_props: Option<Rc<SvgProps>>,
 
     /// The NodeRef for the underlying icon. To provide a NodeRef for the underlying button,
     /// use node_ref in clay_button_props.
@@ -66,7 +67,7 @@ impl Component for ClayButtonWithIcon {
                     spritemap={props.spritemap}
                     symbol={props.symbol.clone()}
                     node_ref={props.icon_node_ref.clone()}
-                    svg_props={props.icon_svg_props.clone()}
+                    svg_html_attributes={props.icon_svg_props.clone()}
                      />
             </ClayButton>
         }

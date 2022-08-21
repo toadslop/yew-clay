@@ -4,8 +4,8 @@ use std::rc::Rc;
 use gloo_events::EventListener;
 use strum_macros::Display;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::button_props::ButtonProps;
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::button_props::ButtonProps;
+use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html]

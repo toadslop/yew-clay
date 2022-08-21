@@ -1,8 +1,8 @@
 use gloo_events::EventListener;
 use std::{collections::HashMap, rc::Rc};
 use yew::{classes, html, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::svg_props::SvgProps;
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::svg_props::SvgProps;
+use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClayIcon.
 pub struct ClayIcon {

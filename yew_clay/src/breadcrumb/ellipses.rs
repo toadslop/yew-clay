@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::global_props::GlobalProps;
+use yew_dom_attributes::global_props::GlobalProps;
 
 pub struct Ellipsis;
 

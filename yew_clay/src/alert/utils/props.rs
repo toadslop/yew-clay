@@ -3,7 +3,7 @@ use crate::button::ClayButtonGroup;
 use std::rc::Rc;
 use web_sys::MouseEvent;
 use yew::{virtual_dom::VChild, Callback, Children, Classes, NodeRef, Properties};
-use yew_dom_attributes::props::global_props::GlobalProps;
+use yew_dom_attributes::global_props::GlobalProps;
 
 /// Props for ClayAlert. For details, check the docs:
 /// <https://clayui.com/docs/components/alert/api.html#alert>

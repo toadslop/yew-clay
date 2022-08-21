@@ -1,12 +1,12 @@
 use super::button::ClayButton;
-// use super::ClayButtonWithIcon;
+use crate::ClayButtonWithIcon;
 use gloo_events::EventListener;
 use std::{collections::HashMap, rc::Rc};
 use yew::virtual_dom::VChild;
 use yew::{classes, Classes, NodeRef};
 use yew::{html, html::ChildrenRenderer, Component, Context, Html, Properties};
-use yew_dom_attributes::props::global_props::GlobalProps;
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::global_props::GlobalProps;
+use yew_dom_attributes::DomInjector;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
 pub struct ClayButtonGroup {
@@ -39,7 +39,7 @@ pub struct ButtonGroupProps {
 #[derive(Clone, derive_more::From, PartialEq)]
 pub enum ButtonType {
     Button(VChild<ClayButton>),
-    // IconButton(VChild<ClayButtonWithIcon>),
+    IconButton(VChild<ClayButtonWithIcon>),
 }
 
 // Now, we implement `Into<Html>` so that yew knows how to render `Item`.
@@ -48,7 +48,7 @@ impl Into<Html> for ButtonType {
     fn into(self) -> Html {
         match self {
             Self::Button(child) => child.into(),
-            // Self::IconButton(child) => child.into(),
+            Self::IconButton(child) => child.into(),
         }
     }
 }

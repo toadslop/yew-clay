@@ -13,7 +13,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use web_sys::MouseEvent;
 use yew::{classes, html, Callback, Component, Context, Html, NodeRef};
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClayAlert. For more info about ClayAlert, check the documentation:
 /// <https://clayui.com/docs/components/alert.html>

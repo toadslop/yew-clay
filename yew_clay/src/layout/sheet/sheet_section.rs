@@ -4,7 +4,7 @@ use std::rc::Rc;
 use gloo_events::EventListener;
 use yew::{classes, html, Component, Context, Html, NodeRef};
 
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::DomInjector;
 
 use super::ContainerProps;
 
