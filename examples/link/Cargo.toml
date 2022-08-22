@@ -13,6 +13,8 @@ wasm-bindgen = "0.2.82"
 wee_alloc = "0.4.5"
 yew = "0.19.3"
 yew-clay = { path = "../../yew_clay", features = ["link", "layout"]}
+domatt = { path = "../../../domatt" }
+yew-dom-attributes = { path = "../../../yew-dom-attributes" }
 
 [lib]
 crate-type = ["rlib", "cdylib"]
