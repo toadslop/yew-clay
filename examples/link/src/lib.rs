@@ -1,6 +1,9 @@
+use basic_usage::BasicUsage;
 use wasm_bindgen::prelude::wasm_bindgen;
 use yew::{html, Component, Context, Html};
 use yew_clay::ClayContainer;
+
+mod basic_usage;
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -20,6 +23,7 @@ impl Component for LinkDemo {
         html! {
             <ClayContainer class={CONTAINER_CLASS}>
                 <h2>{"Link"}</h2>
+                <BasicUsage />
             </ClayContainer>
         }
     }
