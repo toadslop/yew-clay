@@ -12,8 +12,8 @@ license = "MIT OR Apache-2.0"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-strum = "0.19"
-strum_macros = "0.19"
+strum = "0.24.1"
+strum_macros = "0.24.3"
 yew-clay = { path = "../../yew_clay", features = ["alert", "layout", "icon", "button"]}
 domatt = { path = "../../../domatt" }
 yew = "0.19.3"
