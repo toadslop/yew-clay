@@ -226,7 +226,10 @@ pub struct ClayLinkProps {
 
 pub enum Msg {}
 
-impl<T: LinkContext + Clone + PartialEq + 'static> Component for ClayLink<T> {
+impl<T> Component for ClayLink<T>
+where
+    T: LinkContext + Clone + PartialEq + 'static,
+{
     type Message = Msg;
     type Properties = ClayLinkProps;
 
