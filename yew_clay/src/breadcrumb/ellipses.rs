@@ -29,11 +29,11 @@ impl Component for Ellipsis {
     type Message = Msg;
     type Properties = ClayEllipsisProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
+    fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {}
     }
 }

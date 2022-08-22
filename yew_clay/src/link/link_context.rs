@@ -2,7 +2,7 @@ use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
 
 pub trait LinkContext {
     type BaseComponent: Component<Properties = ATagProps> + Clone + PartialEq;

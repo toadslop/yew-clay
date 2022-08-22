@@ -5,8 +5,7 @@ use web_sys::Element;
 use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
 };
-use yew_dom_attributes::props::html_element_props::HtmlElementProps;
-use yew_dom_attributes::props::DomInjector;
+use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
 
 /// Yew implementation of ClayLink.
 /// The type parameter T: LinkContext indicates which link context applies for this link.
@@ -222,7 +221,7 @@ pub struct ClayLinkProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<HtmlElementProps>>,
+    pub html_props: Option<Rc<GlobalProps>>,
 }
 
 pub enum Msg {}
