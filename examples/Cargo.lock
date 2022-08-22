@@ -699,6 +699,7 @@ name = "yew-clay"
 version = "0.1.0"
 dependencies = [
  "derive_more",
+ "domatt",
  "gloo-console",
  "gloo-events",
  "js-sys",
@@ -728,6 +729,16 @@ dependencies = [
 
 [[package]]
 name = "yew-clay-badge-example"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
+ "wee_alloc",
+ "yew",
+ "yew-clay",
+]
+
+[[package]]
+name = "yew-clay-link-example"
 version = "0.1.0"
 dependencies = [
  "wasm-bindgen",
