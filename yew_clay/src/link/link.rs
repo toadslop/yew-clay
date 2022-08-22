@@ -1,11 +1,11 @@
-use crate::link_context::LinkContext;
+use crate::{DefaultLinkContext, LinkContext};
 use gloo_events::EventListener;
 use std::{collections::HashMap, marker::PhantomData, rc::Rc};
 use web_sys::Element;
 use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
 };
-use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
+use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
 
 /// Yew implementation of ClayLink.
 /// The type parameter T: LinkContext indicates which link context applies for this link.
@@ -13,7 +13,7 @@ use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
 /// If you don't need a context, set T to DefaultLinkContext.
 ///
 /// <https://clayui.com/docs/components/link.html>
-pub struct ClayLink<T: LinkContext> {
+pub struct ClayLink<T: LinkContext = DefaultLinkContext> {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
@@ -221,7 +221,7 @@ pub struct ClayLinkProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<GlobalProps>>,
+    pub anchor_props: Option<Rc<AnchorProps>>,
 }
 
 pub enum Msg {}
@@ -307,7 +307,7 @@ where
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        if let Some(custom_props) = &ctx.props().html_props {
+        if let Some(custom_props) = &ctx.props().anchor_props {
             let mut custom_props = custom_props.clone();
             Rc::make_mut(&mut custom_props).inject(&self.node_ref, &mut self.listeners);
             custom_props
