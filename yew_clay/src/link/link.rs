@@ -1,11 +1,12 @@
-use crate::{DefaultLinkContext, LinkContext};
 use gloo_events::EventListener;
-use std::{collections::HashMap, marker::PhantomData, rc::Rc};
+use std::{collections::HashMap, rc::Rc};
 use web_sys::Element;
 use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
 };
 use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
+
+use crate::LinkContext;
 
 /// Yew implementation of ClayLink.
 /// The type parameter T: LinkContext indicates which link context applies for this link.
@@ -13,15 +14,18 @@ use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
 /// If you don't need a context, set T to DefaultLinkContext.
 ///
 /// <https://clayui.com/docs/components/link.html>
-pub struct ClayLink<T: LinkContext = DefaultLinkContext> {
+///
+/// A note on the ClayLinkContext. ClayLinkContext allows you to pass arbitrary props to every
+/// single ClayLink. However, any props defined directly on the ClayLink take precedence and will
+/// override thos set on the ClayLinkContext.
+pub struct ClayLink {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
     listeners: HashMap<String, Rc<EventListener>>,
-    phantom: PhantomData<T>,
 }
 
-impl<'a, T: LinkContext> ClayLink<T> {
+impl<'a> ClayLink {
     const BTN: &'a str = "btn";
     const BTN_BLOCK: &'a str = "btn-block";
     const BTN_MONOSPACED: &'a str = "btn-monospaced";
@@ -226,10 +230,7 @@ pub struct ClayLinkProps {
 
 pub enum Msg {}
 
-impl<T> Component for ClayLink<T>
-where
-    T: LinkContext + Clone + PartialEq + 'static,
-{
+impl Component for ClayLink {
     type Message = Msg;
     type Properties = ClayLinkProps;
 
@@ -237,7 +238,6 @@ where
         Self {
             node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
-            phantom: PhantomData,
         }
     }
 
@@ -295,8 +295,11 @@ where
             )
         };
 
-        if let Some((context, _)) = ctx.link().context::<T>(Callback::noop()) {
-            context.render(base_html, class, node_ref)
+        if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
+            let tag = context.tag;
+            html! {
+                <@{tag}>{base_html}</@>
+            }
         } else {
             html! {
               <a class={class} ref={node_ref}>
@@ -307,6 +310,14 @@ where
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
+        if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
+            let mut context_props = context.props.clone();
+            Rc::make_mut(&mut context_props).inject(&self.node_ref, &mut self.listeners);
+            context_props
+                .get_props_update_callback()
+                .emit(context_props.clone());
+        }
+
         if let Some(custom_props) = &ctx.props().anchor_props {
             let mut custom_props = custom_props.clone();
             Rc::make_mut(&mut custom_props).inject(&self.node_ref, &mut self.listeners);
