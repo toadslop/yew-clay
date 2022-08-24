@@ -1,15 +1,16 @@
 use basic_usage::BasicUsage;
 use wasm_bindgen::prelude::wasm_bindgen;
+use with_context::WithContext;
 use yew::{html, Component, Context, Html};
-use yew_clay::ClayContainer;
 
 mod basic_usage;
+mod with_context;
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 struct LinkDemo {}
 
-const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
+pub const CONTAINER_CLASS: &'static str = "mt-5 py-3 border";
 
 impl Component for LinkDemo {
     type Message = ();
@@ -21,10 +22,10 @@ impl Component for LinkDemo {
 
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
-            <ClayContainer class={CONTAINER_CLASS}>
-                <h2>{"Link"}</h2>
+            <>
                 <BasicUsage />
-            </ClayContainer>
+                <WithContext />
+            </>
         }
     }
 }

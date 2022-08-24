@@ -1,3 +1,4 @@
+use super::LinkContext;
 use gloo_events::EventListener;
 use std::{collections::HashMap, rc::Rc};
 use web_sys::Element;
@@ -5,8 +6,6 @@ use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
 };
 use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
-
-use crate::LinkContext;
 
 /// Yew implementation of ClayLink.
 /// The type parameter T: LinkContext indicates which link context applies for this link.
@@ -255,7 +254,6 @@ impl Component for ClayLink {
             display_type,
             ..
         } = ctx.props().clone();
-        let base_html = html! {<>{children}</>};
 
         let class = if let Some(button) = button {
             let btn_class = Self::get_btn_class(&button);
@@ -295,17 +293,14 @@ impl Component for ClayLink {
             )
         };
 
-        if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
-            let tag = context.tag;
-            html! {
-                <@{tag}>{base_html}</@>
-            }
+        let tag = if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
+            context.tag
         } else {
-            html! {
-              <a class={class} ref={node_ref}>
-                {base_html}
-              </a>
-            }
+            "a".into()
+        };
+
+        html! {
+            <@{tag} class={class} ref={node_ref}>{children}</@>
         }
     }
 

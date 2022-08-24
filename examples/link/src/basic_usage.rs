@@ -2,9 +2,11 @@ use domatt::attributes::anchor::Href;
 use domatt::attributes::aria::AriaLabel;
 use std::rc::Rc;
 use yew::{html, Component};
-use yew_clay::{ClayLink, LinkDisplayType};
+use yew_clay::{ClayContainer, ClayLink, LinkDisplayType};
 use yew_dom_attributes::anchor_props::AnchorProps;
 use yew_dom_attributes::DomInjector;
+
+use crate::CONTAINER_CLASS;
 
 pub struct BasicUsage {
     anchor_props: Rc<AnchorProps>,
@@ -38,7 +40,8 @@ impl Component for BasicUsage {
 
     fn view(&self, _ctx: &yew::Context<Self>) -> yew::Html {
         html! {
-            <div>
+            <ClayContainer class={CONTAINER_CLASS}>
+                <h2>{"Basic Usage"}</h2>
                 <ClayLink anchor_props={self.anchor_props.clone()}>{"Default"}</ClayLink>
                 <ClayLink
                     anchor_props={self.anchor_props.clone()}
@@ -46,7 +49,7 @@ impl Component for BasicUsage {
                         {"Secondary"}
                 </ClayLink>
                 <ClayLink anchor_props={self.with_aria_props.clone()}>{"With Aria Label"}</ClayLink>
-            </div>
+            </ClayContainer>
         }
     }
 
