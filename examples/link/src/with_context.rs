@@ -15,8 +15,6 @@ pub struct WithContext {
 }
 
 pub enum Msg {
-    UpdateContextProps(Rc<AnchorProps>),
-    UpdateAnchorProps(Rc<AnchorProps>),
     None,
 }
 
@@ -25,8 +23,7 @@ impl Component for WithContext {
     type Properties = ();
 
     fn create(ctx: &yew::Context<Self>) -> Self {
-        let update_func = |context_props: Rc<AnchorProps>| Msg::UpdateContextProps(context_props);
-        let mut context_props = AnchorProps::new(&ctx, update_func);
+        let mut context_props = AnchorProps::new();
         let click = ctx.link().callback(|ev: MouseEvent| {
             match confirm("r u sure?") {
                 true => (),
@@ -41,8 +38,7 @@ impl Component for WithContext {
             props: Rc::new(context_props),
         };
 
-        let update_func = |anchor_props: Rc<AnchorProps>| Msg::UpdateAnchorProps(anchor_props);
-        let mut anchor_props = AnchorProps::new(&ctx, update_func);
+        let mut anchor_props = AnchorProps::new();
         anchor_props.add_attribute(Box::new(Href::new(String::from("#"))));
 
         Self {
@@ -55,23 +51,14 @@ impl Component for WithContext {
         html! {
             <ClayContainer class={CONTAINER_CLASS}>
                 <ContextProvider<LinkContext> context={self.link_context.clone()}>
-                    <ClayLink anchor_props={self.anchor_props.clone()}>{"Click Me"}</ClayLink>
+                    <div class="row pl-2">
+                        <ClayLink anchor_props={self.anchor_props.clone()}>{"Click Me"}</ClayLink>
+                    </div>
+                    <div class="row pl-2">
+                        <ClayLink >{"Click Me Too"}</ClayLink>
+                    </div>
                 </ContextProvider<LinkContext>>
             </ClayContainer>
-        }
-    }
-
-    fn update(&mut self, _ctx: &yew::Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::UpdateContextProps(context_props) => {
-                self.link_context.props = context_props;
-                false
-            }
-            Msg::None => false,
-            Msg::UpdateAnchorProps(anchor_props) => {
-                self.anchor_props = anchor_props;
-                false
-            }
         }
     }
 }

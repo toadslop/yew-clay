@@ -13,22 +13,15 @@ pub struct BasicUsage {
     with_aria_props: Rc<AnchorProps>,
 }
 
-pub enum Msg {
-    UpdateAnchorProps(Rc<AnchorProps>),
-    UpdateWithAriaProps(Rc<AnchorProps>),
-}
-
 impl Component for BasicUsage {
-    type Message = Msg;
+    type Message = ();
     type Properties = ();
 
     fn create(ctx: &yew::Context<Self>) -> Self {
-        let update_func = |anchor_props: Rc<AnchorProps>| Msg::UpdateAnchorProps(anchor_props);
-        let mut anchor_props = AnchorProps::new(&ctx, update_func);
+        let mut anchor_props = AnchorProps::new();
         anchor_props.add_attribute(Box::new(Href::new(String::from("#link-styles"))));
 
-        let update_func = |anchor_props: Rc<AnchorProps>| Msg::UpdateWithAriaProps(anchor_props);
-        let mut with_aria_props = AnchorProps::new(&ctx, update_func);
+        let mut with_aria_props = AnchorProps::new();
         with_aria_props.add_attribute(Box::new(AriaLabel::new(String::from("My Link"))));
         with_aria_props.add_attribute(Box::new(Href::new(String::from("#link-styles"))));
 
@@ -50,19 +43,6 @@ impl Component for BasicUsage {
                 </ClayLink>
                 <ClayLink anchor_props={self.with_aria_props.clone()}>{"With Aria Label"}</ClayLink>
             </ClayContainer>
-        }
-    }
-
-    fn update(&mut self, _ctx: &yew::Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::UpdateAnchorProps(new_props) => {
-                self.anchor_props = new_props;
-                false
-            }
-            Msg::UpdateWithAriaProps(new_props) => {
-                self.with_aria_props = new_props;
-                false
-            }
         }
     }
 }
