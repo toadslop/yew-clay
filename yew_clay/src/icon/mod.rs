@@ -63,9 +63,9 @@ impl Component for ClayIcon {
         if let Some(svg_props) = &ctx.props().svg_html_attributes {
             let mut svg_props = svg_props.clone();
             Rc::make_mut(&mut svg_props).inject(&self.node_ref, &mut self.listeners);
-            svg_props
-                .get_props_update_callback()
-                .emit(svg_props.clone());
+            if let Some(cb) = svg_props.get_props_update_callback() {
+                cb.emit(svg_props.clone());
+            }
         }
     }
 }

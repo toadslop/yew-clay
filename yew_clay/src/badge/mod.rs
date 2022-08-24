@@ -80,9 +80,9 @@ impl Component for ClayBadge {
         if let Some(button_props) = &ctx.props().button_html_attributes {
             let mut button_props = button_props.clone();
             Rc::make_mut(&mut button_props).inject(&self.node_ref, &mut self.listeners);
-            button_props
-                .get_props_update_callback()
-                .emit(button_props.clone());
+            if let Some(cb) = button_props.get_props_update_callback() {
+                cb.emit(button_props.clone());
+            }
         }
     }
 }

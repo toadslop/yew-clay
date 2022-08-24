@@ -60,9 +60,9 @@ impl Component for ClayToastContainer {
         if let Some(html_props) = &ctx.props().html_props {
             let mut html_props = html_props.clone();
             Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            html_props
-                .get_props_update_callback()
-                .emit(html_props.clone());
+            if let Some(cb) = html_props.get_props_update_callback() {
+                cb.emit(html_props.clone());
+            }
         }
     }
 }

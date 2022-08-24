@@ -308,17 +308,17 @@ impl Component for ClayLink {
         if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
             let mut context_props = context.props.clone();
             Rc::make_mut(&mut context_props).inject(&self.node_ref, &mut self.listeners);
-            context_props
-                .get_props_update_callback()
-                .emit(context_props.clone());
+            if let Some(cb) = context_props.get_props_update_callback() {
+                cb.emit(context_props.clone());
+            }
         }
 
         if let Some(custom_props) = &ctx.props().anchor_props {
             let mut custom_props = custom_props.clone();
             Rc::make_mut(&mut custom_props).inject(&self.node_ref, &mut self.listeners);
-            custom_props
-                .get_props_update_callback()
-                .emit(custom_props.clone());
+            if let Some(cb) = custom_props.get_props_update_callback() {
+                cb.emit(custom_props.clone());
+            }
         }
 
         if let Some(elem) = &self.node_ref.cast::<Element>() {
