@@ -709,6 +709,7 @@ name = "yew-clay-link-example"
 version = "0.1.0"
 dependencies = [
  "domatt",
+ "gloo-dialogs",
  "wasm-bindgen",
  "wee_alloc",
  "yew",
