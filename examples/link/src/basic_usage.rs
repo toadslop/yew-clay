@@ -17,7 +17,7 @@ impl Component for BasicUsage {
     type Message = ();
     type Properties = ();
 
-    fn create(ctx: &yew::Context<Self>) -> Self {
+    fn create(_ctx: &yew::Context<Self>) -> Self {
         let mut anchor_props = AnchorProps::new();
         anchor_props.add_attribute(Box::new(Href::new(String::from("#link-styles"))));
 
