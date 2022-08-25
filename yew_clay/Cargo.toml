@@ -31,8 +31,8 @@ icon = []
 layout = ["dep:strum", "dep:strum_macros"]
 alert = ["dep:js-sys", "dep:strum", "dep:web-sys"]
 badge = ["dep:strum"]
-breadcrumb = []
-link = ["domatt/anchor"]
+breadcrumb = ["link"]
+link = ["domatt/anchor", "domatt/global"]
 full = [
     "button",
     "icon",
@@ -42,4 +42,4 @@ full = [
     "breadcrumb",
     "link"
 ]
-default = ["button", "icon", "layout", "alert", "badge"]
+default = ["button", "icon", "layout", "alert", "badge", "link"]

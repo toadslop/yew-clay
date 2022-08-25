@@ -1,7 +1,8 @@
 use std::rc::Rc;
-
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
+
+// This is on hold until ClayDropDown is finished.
 
 pub struct Ellipsis;
 

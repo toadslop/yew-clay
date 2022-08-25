@@ -1,5 +1,6 @@
+use crate::{ButtonDisplayType, ClayButton, ClayLink};
+use domatt::attributes::anchor::Href;
 use domatt::attributes::global::{AriaRole, CustomAttribute, Role, Title};
-use domatt::attributes::svg::Href;
 use domatt::events::Click;
 use gloo_events::EventListener;
 use std::collections::HashMap;
@@ -11,8 +12,6 @@ use yew::{
 use yew_dom_attributes::anchor_props::AnchorProps;
 use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;
-
-use crate::{ButtonDisplayType, ClayButton, ClayLink};
 
 pub struct ClayItem {
     node_ref: NodeRef,
