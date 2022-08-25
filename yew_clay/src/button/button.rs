@@ -33,8 +33,8 @@ pub struct ClayButtonProps {
     pub block: bool,
 
     /// Determines how to button is displayed. Follows bootstrap coloring scheme.
-    #[prop_or(DisplayType::Primary)]
-    pub display_type: DisplayType,
+    #[prop_or(ButtonDisplayType::Primary)]
+    pub display_type: ButtonDisplayType,
 
     /// Flag to indicate if button should be monospaced.
     #[prop_or_default]
@@ -142,7 +142,7 @@ impl Component for ClayButton {
 // An enum specifying the different default styles of ClayButton.
 #[derive(Debug, PartialEq, Clone, Display, Default)]
 #[strum(serialize_all = "lowercase")]
-pub enum DisplayType {
+pub enum ButtonDisplayType {
     #[default]
     Primary,
     Secondary,
