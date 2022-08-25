@@ -89,11 +89,11 @@ impl ClayButton {
             classes.push("btn-sm".into());
         }
 
-        if !props.outline && !props.borderless {
+        if !props.outline && !props.borderless && props.display_type != ButtonDisplayType::Base {
             classes.push(format!("btn-{}", props.display_type.to_string()));
         }
 
-        if props.outline || props.borderless {
+        if props.outline || props.borderless && props.display_type != ButtonDisplayType::Base {
             classes.push(format!("btn-outline-{}", props.display_type.to_string()));
         }
 
@@ -152,4 +152,5 @@ pub enum ButtonDisplayType {
     Danger,
     Info,
     Unstyled,
+    Base,
 }
