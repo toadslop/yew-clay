@@ -705,6 +705,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "yew-clay-buttongroup-example"
+version = "0.1.0"
+dependencies = [
+ "domatt",
+ "gloo-dialogs",
+ "wasm-bindgen",
+ "wee_alloc",
+ "yew",
+ "yew-clay",
+ "yew-dom-attributes",
+]
+
+[[package]]
 name = "yew-clay-link-example"
 version = "0.1.0"
 dependencies = [
