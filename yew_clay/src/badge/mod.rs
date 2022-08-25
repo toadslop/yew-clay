@@ -1,7 +1,7 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-use strum::Display;
+use strum::{AsRefStr, Display};
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;
@@ -42,8 +42,14 @@ pub struct ClayBadgeProps {
 }
 
 impl ClayBadge {
+    const BADGE: &'static str = "badge-";
+
     fn get_display_class(display_type: BadgeDisplayType) -> String {
-        format!("badge-{}", display_type.to_string())
+        let as_str = display_type.as_ref();
+        let mut display_class = String::with_capacity(Self::BADGE.len() + as_str.len());
+        display_class.push_str(Self::BADGE);
+        display_class.push_str(as_str);
+        display_class
     }
 }
 
@@ -87,7 +93,7 @@ impl Component for ClayBadge {
     }
 }
 
-#[derive(Display, Debug, PartialEq, Clone, Default)]
+#[derive(AsRefStr, Debug, PartialEq, Clone, Default)]
 #[strum(serialize_all = "lowercase")]
 pub enum BadgeDisplayType {
     #[default]

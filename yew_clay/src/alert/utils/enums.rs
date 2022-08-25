@@ -1,12 +1,12 @@
-use strum::Display;
+use strum::AsRefStr;
 
-#[derive(Display, Debug, PartialEq, Clone)]
+#[derive(AsRefStr, Debug, PartialEq, Clone)]
 pub enum AutoCloseValue {
     Boolean(bool),
     Number(u32),
 }
 
-#[derive(Display, Debug, PartialEq, Clone, Default)]
+#[derive(AsRefStr, Debug, PartialEq, Clone, Default)]
 #[strum(serialize_all = "lowercase")]
 pub enum AlertDisplayType {
     Danger,
@@ -16,7 +16,7 @@ pub enum AlertDisplayType {
     Warning,
 }
 
-#[derive(Display, Debug, PartialEq, Clone)]
+#[derive(AsRefStr, Debug, PartialEq, Clone)]
 #[strum(serialize_all = "lowercase")]
 pub enum AlertVariant {
     Feedback,

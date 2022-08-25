@@ -36,6 +36,8 @@ pub enum Msg {
 }
 
 impl ClayAlert {
+    const ALERT: &'static str = "alert-";
+
     fn get_show_dismissible(
         on_close: &Option<Callback<MouseEvent>>,
         hide_close_icon: bool,
@@ -63,7 +65,11 @@ impl ClayAlert {
     }
 
     fn get_display_class(display_type: &AlertDisplayType) -> Option<String> {
-        Some(format!("alert-{}", display_type))
+        let display_type_str = display_type.as_ref();
+        let mut display_class = String::with_capacity(display_type_str.len() + Self::ALERT.len());
+        display_class.push_str(Self::ALERT);
+        display_class.push_str(display_type_str);
+        Some(display_class)
     }
 }
 
