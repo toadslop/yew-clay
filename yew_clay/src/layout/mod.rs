@@ -15,10 +15,10 @@ pub use sheet::*;
 
 mod row;
 pub use row::*;
-use strum::Display;
+use strum::AsRefStr;
 
 /// An enum specifying size varients.
-#[derive(Debug, PartialEq, Clone, Display)]
+#[derive(Debug, PartialEq, Clone, AsRefStr)]
 pub enum Sizing {
     #[strum(serialize = "sm")]
     Small,

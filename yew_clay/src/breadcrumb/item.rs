@@ -1,4 +1,5 @@
-use crate::{ButtonDisplayType, ClayButton, ClayLink};
+use crate::button::{ButtonDisplayType, ClayButton};
+use crate::link::ClayLink;
 use domatt::attributes::anchor::Href;
 use domatt::attributes::global::{AriaRole, CustomAttribute, Role, Title};
 use domatt::events::Click;

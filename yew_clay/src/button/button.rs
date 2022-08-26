@@ -1,8 +1,7 @@
+use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-
-use gloo_events::EventListener;
-use strum_macros::Display;
+use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::button_props::ButtonProps;
 use yew_dom_attributes::DomInjector;
@@ -90,11 +89,11 @@ impl ClayButton {
         }
 
         if !props.outline && !props.borderless && props.display_type != ButtonDisplayType::Base {
-            classes.push(format!("btn-{}", props.display_type.to_string()));
+            classes.push(format!("btn-{}", props.display_type.as_ref()));
         }
 
         if props.outline || props.borderless && props.display_type != ButtonDisplayType::Base {
-            classes.push(format!("btn-outline-{}", props.display_type.to_string()));
+            classes.push(format!("btn-outline-{}", props.display_type.as_ref()));
         }
 
         classes.join(" ")
@@ -140,7 +139,7 @@ impl Component for ClayButton {
 }
 
 // An enum specifying the different default styles of ClayButton.
-#[derive(Debug, PartialEq, Clone, Display, Default)]
+#[derive(Debug, PartialEq, Clone, AsRefStr, Default)]
 #[strum(serialize_all = "lowercase")]
 pub enum ButtonDisplayType {
     #[default]

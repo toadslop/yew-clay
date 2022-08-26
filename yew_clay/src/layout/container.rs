@@ -56,16 +56,37 @@ pub struct ClayContainerProps {
 }
 
 impl ClayContainer {
+    const FLUID: &'static str = "fluid";
+    const CONTAINER: &'static str = "container";
+    const FORM: &'static str = "form";
+    const VIEW: &'static str = "view";
+    const MAX: &'static str = "max";
+
     fn get_container_type_class(&self, fluid: bool) -> String {
         if fluid {
-            "container-fluid".into()
+            let mut container_class =
+                String::with_capacity(Self::CONTAINER.len() + Self::FLUID.len() + 1);
+            container_class.push_str(Self::CONTAINER);
+            container_class.push_str("-");
+            container_class.push_str(Self::FLUID);
+            container_class
         } else {
-            "container".into()
+            Self::CONTAINER.into()
         }
     }
 
     fn get_container_form_size_class(&self, form_size: Option<FormSize>) -> Option<String> {
-        form_size.map(|size| format!("container-form-{}", size.to_string()))
+        form_size.map(|size| {
+            let size = size.as_ref();
+            let mut form_class =
+                String::with_capacity(Self::CONTAINER.len() + Self::FLUID.len() + size.len() + 2);
+            form_class.push_str(Self::CONTAINER);
+            form_class.push_str("-");
+            form_class.push_str(Self::FORM);
+            form_class.push_str("-");
+            form_class.push_str(size);
+            form_class
+        })
     }
 
     fn get_container_view_class(&self, view: bool) -> Option<String> {
@@ -78,10 +99,23 @@ impl ClayContainer {
 
     fn get_fluid_max_class(&self, fluid: bool, fluid_size: Option<FluidSize>) -> Option<String> {
         if fluid && fluid_size.is_some() {
-            Some(format!(
-                "container-fluid-max-{}",
-                fluid_size.unwrap().to_string()
-            ))
+            let fluid_size = fluid_size.unwrap();
+            let fluid_size_ref = fluid_size.as_ref();
+            let mut fluid_max_class = String::with_capacity(
+                Self::CONTAINER.len()
+                    + Self::FLUID.len()
+                    + Self::MAX.len()
+                    + fluid_size_ref.len()
+                    + 3,
+            );
+            fluid_max_class.push_str(Self::CONTAINER);
+            fluid_max_class.push_str("-");
+            fluid_max_class.push_str(Self::FLUID);
+            fluid_max_class.push_str("-");
+            fluid_max_class.push_str(Self::MAX);
+            fluid_max_class.push_str("-");
+            fluid_max_class.push_str(fluid_size_ref);
+            Some(fluid_max_class)
         } else {
             None
         }

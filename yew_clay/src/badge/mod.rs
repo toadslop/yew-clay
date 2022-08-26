@@ -1,7 +1,7 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-use strum::{AsRefStr, Display};
+use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;

@@ -1,8 +1,8 @@
-use std::rc::Rc;
+use crate::icon::ClayIcon;
 
 use super::button::ClayButton;
 use super::ClayButtonProps;
-use crate::icon::ClayIcon;
+use std::rc::Rc;
 use yew::{html, Component, Context, NodeRef, Properties};
 use yew_dom_attributes::svg_props::SvgProps;
 

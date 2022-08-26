@@ -1,12 +1,11 @@
+use crate::HasBoolClass;
 use gloo_events::EventListener;
 use std::collections::HashMap;
 use std::rc::Rc;
-use strum::Display;
+use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;
-
-use crate::HasBoolClass;
 
 /// A Yew implementation of ClayRow. For more info about ClayRow, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>
@@ -55,7 +54,13 @@ impl ClayRow {
 
     fn get_justify_class(&self, justify: Option<RowJustify>) -> Option<String> {
         if let Some(justify) = justify {
-            Some(format!("{}-{}", Self::JUSTIFY_CONTENT, justify))
+            let justify = justify.as_ref();
+            let mut justify_class =
+                String::with_capacity(justify.len() + Self::JUSTIFY_CONTENT.len() + 1);
+            justify_class.push_str(Self::JUSTIFY_CONTENT);
+            justify_class.push_str("-");
+            justify_class.push_str(justify);
+            Some(justify_class)
         } else {
             None
         }
@@ -109,7 +114,7 @@ impl Component for ClayRow {
     }
 }
 
-#[derive(Display, Debug, PartialEq, Clone)]
+#[derive(AsRefStr, Debug, PartialEq, Clone)]
 #[strum(serialize_all = "lowercase")]
 pub enum RowJustify {
     Start,

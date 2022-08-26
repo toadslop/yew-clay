@@ -2,8 +2,9 @@ mod button;
 #[cfg(feature = "button")]
 pub use button::*;
 
+mod icon;
 #[cfg(feature = "icon")]
-pub mod icon;
+pub use icon::*;
 
 mod layout;
 #[cfg(feature = "layout")]
@@ -41,3 +42,6 @@ trait HasBoolClass {
         }
     }
 }
+
+// TODO: Create a string pool for class names; use cfg feature any for any packages that need it
+// should optimize size somewhat

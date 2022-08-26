@@ -13,33 +13,32 @@ license = "Apache-2.0"
 description = "Yew wrapper for Clay Web Components"
 
 [dependencies]
-js-sys = { version ="0.3.58", optional = true }
+js-sys = { version ="0.3.59" }
 yew = "0.19.3"
-strum = { version = "0.24.1", features = ["derive"], optional = true }
-strum_macros = {version = "0.24.2", optional = true }
+strum = { version = "0.24.1", features = ["derive"] }
 yew-dom-attributes = { path = "../../yew-dom-attributes" }
 gloo-events = "0.1.2"
-derive_more = { version = "0.99.17", features = ["from"], optional = true}
-web-sys = {version = "0.3.59", features = ["Window", "MouseEvent"], optional = true }
+derive_more = { version = "0.99.17", features = ["from"]}
+web-sys = {version = "0.3.59", features = ["Window", "MouseEvent", "Element"]}
 wasm-bindgen = "0.2.82"
-domatt = { path = "../../domatt", optional = true }
+domatt = { path = "../../domatt" }
 gloo-console = "0.2.1"
 
 [features]
-button = ["dep:strum_macros","dep:derive_more"]
 icon = []
-layout = ["dep:strum", "dep:strum_macros"]
-alert = ["dep:js-sys", "dep:strum", "dep:web-sys"]
-badge = ["dep:strum"]
-breadcrumb = ["link"]
-link = ["domatt/anchor", "domatt/global"]
-full = [
-    "button",
-    "icon",
-    "layout",
-    "alert",
-    "badge",
-    "breadcrumb",
-    "link"
-]
-default = ["button", "icon", "layout", "alert", "badge", "link"]
+button = ["strum/derive","derive_more/from","icon"]
+layout = ["strum/derive"]
+alert = ["strum/derive", "web-sys/Element"]
+badge = ["strum/derive"]
+breadcrumb = ["link","domatt/anchor","domatt/global","button"]
+link = ["web-sys/Element"]
+# full = [
+#     "button",
+#     "icon",
+#     "layout",
+#     "alert",
+#     "badge",
+#     "breadcrumb",
+#     "link"
+# ]
+# default = ["button", "icon", "layout", "alert", "badge", "link"]

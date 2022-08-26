@@ -1,5 +1,5 @@
 use super::button::ClayButton;
-use crate::ClayButtonWithIcon;
+use super::ClayButtonWithIcon;
 use gloo_events::EventListener;
 use std::{collections::HashMap, rc::Rc};
 use yew::virtual_dom::VChild;
