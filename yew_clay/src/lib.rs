@@ -16,10 +16,7 @@ pub use button::*;
 
 mod card;
 #[cfg(feature = "card")]
-pub use card::{
-    aspect_ratio::{ContainerAspectRatioType, Props},
-    ClayCardContext,
-};
+pub use card::aspect_ratio::{ContainerAspectRatioType, Props};
 
 mod icon;
 #[cfg(feature = "icon")]
