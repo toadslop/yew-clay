@@ -1,15 +1,3 @@
-mod button;
-#[cfg(feature = "button")]
-pub use button::*;
-
-mod icon;
-#[cfg(feature = "icon")]
-pub use icon::*;
-
-mod layout;
-#[cfg(feature = "layout")]
-pub use layout::*;
-
 mod alert;
 #[cfg(feature = "alert")]
 pub use alert::*;
@@ -21,6 +9,25 @@ pub use badge::*;
 mod breadcrumb;
 #[cfg(feature = "breadcrumb")]
 pub use breadcrumb::*;
+
+mod button;
+#[cfg(feature = "button")]
+pub use button::*;
+
+mod card;
+#[cfg(feature = "card")]
+pub use card::{
+    aspect_ratio::{ContainerAspectRatioType, Props},
+    ClayCardContext,
+};
+
+mod icon;
+#[cfg(feature = "icon")]
+pub use icon::*;
+
+mod layout;
+#[cfg(feature = "layout")]
+pub use layout::*;
 
 mod link;
 #[cfg(feature = "link")]
