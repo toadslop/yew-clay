@@ -14,7 +14,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 strum = "0.24.1"
 strum_macros = "0.24.3"
-yew-clay = { path = "../../yew_clay", features = ["alert", "layout", "icon", "button"]}
+yew-clay = { path = "../../yew_clay", default-features = false, features = ["alert", "layout", "icon", "button"]}
 domatt = { path = "../../../domatt" }
 yew = "0.19.3"
 web-sys = {version = "0.3.59", features = ["HtmlHtmlElement"]}
