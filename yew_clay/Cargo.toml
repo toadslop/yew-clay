@@ -32,6 +32,7 @@ alert = ["strum/derive", "web-sys/Element"]
 badge = ["strum/derive"]
 breadcrumb = ["link","domatt/anchor","domatt/global","button"]
 link = ["web-sys/Element"]
+card = []
 full = [
     "button",
     "icon",
@@ -39,6 +40,7 @@ full = [
     "alert",
     "badge",
     "breadcrumb",
-    "link"
+    "link",
+    "card"
 ]
 default = ["full"]
