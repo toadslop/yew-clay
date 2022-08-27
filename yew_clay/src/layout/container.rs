@@ -91,7 +91,12 @@ impl ClayContainer {
 
     fn get_container_view_class(&self, view: bool) -> Option<String> {
         if view {
-            Some("container-view".into())
+            let mut view_class =
+                String::with_capacity(Self::CONTAINER.len() + Self::VIEW.len() + 1);
+            view_class.push_str(Self::CONTAINER);
+            view_class.push_str("-");
+            view_class.push_str(Self::VIEW);
+            Some(view_class)
         } else {
             None
         }
