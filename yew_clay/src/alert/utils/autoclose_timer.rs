@@ -23,7 +23,9 @@ pub fn pause(
 
         let time_to_close = time_to_close.unwrap();
         let started_time = started_time.unwrap_or(0.0);
-        let time_to_close = (time_to_close) - (js_sys::Date::now() - started_time) as u32;
+        let time_to_close = time_to_close
+            .checked_sub((js_sys::Date::now() - started_time) as u32)
+            .unwrap_or(0);
 
         if time_to_close > 0 {
             return Some(time_to_close);

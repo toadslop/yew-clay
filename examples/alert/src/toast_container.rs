@@ -35,7 +35,6 @@ impl Component for WithToastContainer {
                 true
             }
             Msg::RemoveItem(index) => {
-                gloo_console::log!(format!("{:?}", self.toast_items));
                 self.toast_items.remove(&index);
                 true
             }

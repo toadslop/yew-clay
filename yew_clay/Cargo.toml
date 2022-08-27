@@ -22,7 +22,7 @@ derive_more = { version = "0.99.17", features = ["from"]}
 web-sys = {version = "0.3.59", features = ["Window", "MouseEvent", "Element"]}
 wasm-bindgen = "0.2.82"
 domatt = { path = "../../domatt" }
-gloo-console = "0.2.1"
+gloo-console = "0.2.3"
 
 [features]
 icon = []
