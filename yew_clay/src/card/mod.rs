@@ -3,6 +3,7 @@ use yew::{Callback, Component, Context};
 
 pub mod aspect_ratio;
 mod body;
+mod caption;
 mod context;
 
 pub const SPAN: &'static str = "span";

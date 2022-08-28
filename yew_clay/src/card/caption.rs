@@ -21,15 +21,15 @@ pub struct Props {
     pub node_ref: NodeRef,
 }
 
-pub struct ClayCardBody {
+pub struct ClayCardCaption {
     listeners: HashMap<String, Rc<EventListener>>,
 }
 
-impl ClayCardBody {
-    const CARD_BODY: &'static str = "card-body";
+impl ClayCardCaption {
+    const CARD_DETAIL: &'static str = "card-detail";
 }
 
-impl Component for ClayCardBody {
+impl Component for ClayCardCaption {
     type Message = ();
 
     type Properties = Props;
@@ -48,7 +48,7 @@ impl Component for ClayCardBody {
         } = ctx.props().clone();
 
         html! {
-          <@{tag} class={classes!(class, Self::CARD_BODY)}>
+          <@{tag} class={classes!(class, Self::CARD_DETAIL)}>
             {children}
           </@>
         }
@@ -65,4 +65,4 @@ impl Component for ClayCardBody {
     }
 }
 
-impl Interactive for ClayCardBody {}
+impl Interactive for ClayCardCaption {}
