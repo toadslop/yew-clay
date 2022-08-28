@@ -4,7 +4,10 @@ use yew::{Callback, Component, Context};
 pub mod aspect_ratio;
 mod body;
 mod caption;
+mod card_horizontal;
 mod context;
+pub use card_horizontal::ClayCardHorizontal;
+pub use card_horizontal::ClayCardHorizontalBody;
 
 pub const SPAN: &'static str = "span";
 pub const DIV: &'static str = "div";
