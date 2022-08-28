@@ -6,8 +6,6 @@ mod body;
 mod caption;
 mod card_horizontal;
 mod context;
-pub use card_horizontal::ClayCardHorizontal;
-pub use card_horizontal::ClayCardHorizontalBody;
 
 pub const SPAN: &'static str = "span";
 pub const DIV: &'static str = "div";
