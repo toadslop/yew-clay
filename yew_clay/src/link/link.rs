@@ -24,29 +24,29 @@ pub struct ClayLink {
     listeners: HashMap<String, Rc<EventListener>>,
 }
 
-impl<'a> ClayLink {
-    const BTN: &'a str = "btn";
-    const BTN_BLOCK: &'a str = "btn-block";
-    const BTN_MONOSPACED: &'a str = "btn-monospaced";
-    const BTN_OUTLINE_BORDERLESS: &'a str = "btn-outline-borderless";
-    const BTN_SMALL: &'a str = "btn-small";
-    const BTN_PRIMARY: &'a str = "btn-primary";
-    const BTN_SECONDARY: &'a str = "btn-secondary";
-    const BTN_UNSTYLED: &'a str = "btn-unstyled";
-    const BTN_OUTLINE_PRIMARY: &'a str = "btn-outline-primary";
-    const BTN_OUTLINE_SECONDARY: &'a str = "btn-outline-secondary";
-    const BTN_OUTLINE_UNSTYLED: &'a str = "btn-outline-unstyled";
-    const LINK_MONOSPACED: &'a str = "link-monospaced";
-    const LINK_OUTLINE: &'a str = "link-outline";
-    const LINK_BORDERLESS: &'a str = "link-outline-borderless";
-    const LINK_PRIMARY: &'a str = "link-primary";
-    const LINK_SECONDARY: &'a str = "link-secondary";
-    const LINK_UNSTYLED: &'a str = "link-unstyled";
-    const LINK_OUTLINE_PRIMARY: &'a str = "link-outline-primary";
-    const LINK_OUTLINE_SECONDARY: &'a str = "link-outline-secondary";
-    const LINK_OUTLINE_UNSTYLED: &'a str = "link-outline-unstyled";
+impl ClayLink {
+    const BTN: &'static str = "btn";
+    const BTN_BLOCK: &'static str = "btn-block";
+    const BTN_MONOSPACED: &'static str = "btn-monospaced";
+    const BTN_OUTLINE_BORDERLESS: &'static str = "btn-outline-borderless";
+    const BTN_SMALL: &'static str = "btn-small";
+    const BTN_PRIMARY: &'static str = "btn-primary";
+    const BTN_SECONDARY: &'static str = "btn-secondary";
+    const BTN_UNSTYLED: &'static str = "btn-unstyled";
+    const BTN_OUTLINE_PRIMARY: &'static str = "btn-outline-primary";
+    const BTN_OUTLINE_SECONDARY: &'static str = "btn-outline-secondary";
+    const BTN_OUTLINE_UNSTYLED: &'static str = "btn-outline-unstyled";
+    const LINK_MONOSPACED: &'static str = "link-monospaced";
+    const LINK_OUTLINE: &'static str = "link-outline";
+    const LINK_BORDERLESS: &'static str = "link-outline-borderless";
+    const LINK_PRIMARY: &'static str = "link-primary";
+    const LINK_SECONDARY: &'static str = "link-secondary";
+    const LINK_UNSTYLED: &'static str = "link-unstyled";
+    const LINK_OUTLINE_PRIMARY: &'static str = "link-outline-primary";
+    const LINK_OUTLINE_SECONDARY: &'static str = "link-outline-secondary";
+    const LINK_OUTLINE_UNSTYLED: &'static str = "link-outline-unstyled";
 
-    fn get_btn_class(button: &LinkButton) -> Option<&'a str> {
+    fn get_btn_class(button: &LinkButton) -> Option<&'static str> {
         match button {
             LinkButton::Boolean(is_button) => match is_button {
                 true => (),
@@ -57,7 +57,7 @@ impl<'a> ClayLink {
         Some(Self::BTN)
     }
 
-    fn get_btn_block_class(button: &LinkButton, block: Option<bool>) -> Option<&'a str> {
+    fn get_btn_block_class(button: &LinkButton, block: Option<bool>) -> Option<&'static str> {
         let block = block.unwrap_or(false);
         let button = match button {
             LinkButton::Boolean(_) => false,
@@ -71,7 +71,7 @@ impl<'a> ClayLink {
         }
     }
 
-    fn get_btn_monospaced_class(button: &LinkButton, monospaced: bool) -> Option<&'a str> {
+    fn get_btn_monospaced_class(button: &LinkButton, monospaced: bool) -> Option<&'static str> {
         let button = match button {
             LinkButton::Boolean(_) => false,
             LinkButton::Options(opts) => opts.monospaced,
@@ -84,7 +84,7 @@ impl<'a> ClayLink {
         }
     }
 
-    fn get_borderless_class(borderless: bool) -> Option<&'a str> {
+    fn get_borderless_class(borderless: bool) -> Option<&'static str> {
         if borderless {
             Some(Self::BTN_OUTLINE_BORDERLESS)
         } else {
@@ -92,7 +92,7 @@ impl<'a> ClayLink {
         }
     }
 
-    fn get_btn_small_class(button: &LinkButton, small: Option<bool>) -> Option<&'a str> {
+    fn get_btn_small_class(button: &LinkButton, small: Option<bool>) -> Option<&'static str> {
         let small = small.unwrap_or(false);
         let button = match button {
             LinkButton::Boolean(_) => false,
@@ -110,7 +110,7 @@ impl<'a> ClayLink {
         display_type: &Option<LinkDisplayType>,
         outline: bool,
         borderless: bool,
-    ) -> Option<&'a str> {
+    ) -> Option<&'static str> {
         if let Some(display_type) = display_type {
             if !outline && !borderless {
                 return match display_type {
@@ -127,7 +127,7 @@ impl<'a> ClayLink {
         display_type: &Option<LinkDisplayType>,
         outline: bool,
         borderless: bool,
-    ) -> Option<&'a str> {
+    ) -> Option<&'static str> {
         if let Some(display_type) = display_type {
             if outline || borderless {
                 return match display_type {
@@ -140,7 +140,7 @@ impl<'a> ClayLink {
         None
     }
 
-    fn get_bool_class(boolean: bool, class: &'a str) -> Option<&'a str> {
+    fn get_bool_class(boolean: bool, class: &str) -> Option<&str> {
         if boolean {
             Some(class)
         } else {
@@ -151,7 +151,7 @@ impl<'a> ClayLink {
     fn get_link_display_class(
         display_type: &Option<LinkDisplayType>,
         outline: bool,
-    ) -> Option<&'a str> {
+    ) -> Option<&'static str> {
         if !outline {
             if let Some(display_type) = display_type {
                 return match display_type {
@@ -167,7 +167,7 @@ impl<'a> ClayLink {
     fn get_link_outline_display_class(
         display_type: &Option<LinkDisplayType>,
         outline: bool,
-    ) -> Option<&'a str> {
+    ) -> Option<&'static str> {
         if outline {
             if let Some(display_type) = display_type {
                 return match display_type {
