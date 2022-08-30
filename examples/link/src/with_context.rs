@@ -11,7 +11,7 @@ use crate::CONTAINER_CLASS;
 
 pub struct WithContext {
     link_context: LinkContext,
-    anchor_props: Rc<AnchorProps>,
+    anchor_props: AnchorProps,
 }
 
 pub enum Msg {
@@ -43,7 +43,7 @@ impl Component for WithContext {
 
         Self {
             link_context,
-            anchor_props: Rc::new(anchor_props),
+            anchor_props,
         }
     }
 

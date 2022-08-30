@@ -1,6 +1,6 @@
 use super::LinkContext;
 use gloo_events::EventListener;
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 use web_sys::Element;
 use yew::{
     classes, html, Callback, Children, Classes, Component, Context, Html, NodeRef, Properties,
@@ -21,7 +21,7 @@ pub struct ClayLink {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 impl ClayLink {
@@ -224,7 +224,7 @@ pub struct ClayLinkProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub anchor_props: Option<Rc<AnchorProps>>,
+    pub anchor_props: Option<AnchorProps>,
 }
 
 pub enum Msg {}
@@ -306,19 +306,13 @@ impl Component for ClayLink {
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
-            let mut context_props = context.props.clone();
-            Rc::make_mut(&mut context_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = context_props.get_props_update_callback() {
-                cb.emit(context_props.clone());
-            }
+            let context_props = context.props.clone();
+            context_props.inject(&self.node_ref, &mut self.listeners);
         }
 
         if let Some(custom_props) = &ctx.props().anchor_props {
-            let mut custom_props = custom_props.clone();
-            Rc::make_mut(&mut custom_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = custom_props.get_props_update_callback() {
-                cb.emit(custom_props.clone());
-            }
+            let custom_props = custom_props.clone();
+            custom_props.inject(&self.node_ref, &mut self.listeners);
         }
 
         if let Some(elem) = &self.node_ref.cast::<Element>() {

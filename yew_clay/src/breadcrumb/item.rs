@@ -18,9 +18,9 @@ pub struct ClayItem {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
     html: Html,
-    anchor_props: Rc<AnchorProps>,
+    anchor_props: AnchorProps,
 }
 
 /// Props for ClayItem. For details, check the docs:
@@ -53,7 +53,7 @@ pub struct ClayItemProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<GlobalProps>>,
+    pub html_props: Option<GlobalProps>,
 }
 
 pub enum Msg {}
@@ -135,7 +135,7 @@ impl Component for ClayItem {
             node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
             html,
-            anchor_props: Rc::new(anchor_props),
+            anchor_props,
         }
     }
 
@@ -151,18 +151,12 @@ impl Component for ClayItem {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        let mut anchor_props = self.anchor_props.clone();
-        Rc::make_mut(&mut anchor_props).inject(&self.node_ref, &mut self.listeners);
-        if let Some(cb) = anchor_props.get_props_update_callback() {
-            cb.emit(anchor_props.clone());
-        }
+        let anchor_props = self.anchor_props.clone();
+        anchor_props.inject(&self.node_ref, &mut self.listeners);
 
         if let Some(html_props) = &ctx.props().html_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            html_props.inject(&self.node_ref, &mut self.listeners);
         }
     }
 }

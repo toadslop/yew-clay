@@ -1,19 +1,15 @@
-use std::collections::HashMap;
-use std::rc::Rc;
-
-use gloo_events::EventListener;
-use yew::{classes, html, Component, Context, Html, NodeRef};
-
-use yew_dom_attributes::DomInjector;
-
 use super::ContainerProps;
+use gloo_events::EventListener;
+use std::collections::HashMap;
+use yew::{classes, html, Component, Context, Html, NodeRef};
+use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClaySheet.Header.
 pub struct ClaySheetHeader {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 impl Component for ClaySheetHeader {
@@ -43,11 +39,8 @@ impl Component for ClaySheetHeader {
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            html_props.inject(&self.node_ref, &mut self.listeners);
         }
     }
 }

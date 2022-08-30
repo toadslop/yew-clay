@@ -1,6 +1,5 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use std::rc::Rc;
 use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::button_props::ButtonProps;
@@ -12,7 +11,7 @@ pub struct ClayButton {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayButton. For details, check the docs:
@@ -61,7 +60,7 @@ pub struct ClayButtonProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub button_html_attributes: Option<Rc<ButtonProps>>,
+    pub button_html_attributes: Option<ButtonProps>,
 }
 
 impl ClayButton {
@@ -129,11 +128,8 @@ impl Component for ClayButton {
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(button_props) = &ctx.props().button_html_attributes {
-            let mut button_props = button_props.clone();
-            Rc::make_mut(&mut button_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = button_props.get_props_update_callback() {
-                cb.emit(button_props.clone());
-            }
+            let button_props = button_props.clone();
+            button_props.inject(&self.node_ref, &mut self.listeners);
         }
     }
 }

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
 use gloo_events::EventListener;
 use yew::{classes, html, Children, Classes, Component, Html, NodeRef, Properties};
@@ -15,14 +15,14 @@ pub struct Props {
     pub class: Classes,
 
     #[prop_or_default]
-    pub other_props: Option<Rc<GlobalProps>>,
+    pub other_props: Option<GlobalProps>,
 
     #[prop_or_default]
     pub node_ref: NodeRef,
 }
 
 pub struct ClayCardCaption {
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 impl ClayCardCaption {
@@ -56,11 +56,8 @@ impl Component for ClayCardCaption {
 
     fn rendered(&mut self, ctx: &yew::Context<Self>, _first_render: bool) {
         if let Some(other_props) = &ctx.props().other_props {
-            let mut other_props = other_props.clone();
-            Rc::make_mut(&mut other_props).inject(&ctx.props().node_ref, &mut self.listeners);
-            if let Some(cb) = other_props.get_props_update_callback() {
-                cb.emit(other_props.clone());
-            }
+            let other_props = other_props.clone();
+            other_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
     }
 }
