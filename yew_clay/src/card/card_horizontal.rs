@@ -9,9 +9,11 @@ use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
 #[derive(Properties, PartialEq, Clone)]
 pub struct Props {
     /// Flag that indicates if `active` class is applied
+    #[prop_or_default]
     active: bool,
 
     /// Flag that indicates if the card can be selectable.
+    #[prop_or_default]
     selectable: bool,
 
     #[prop_or_default]

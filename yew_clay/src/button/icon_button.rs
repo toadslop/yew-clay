@@ -6,7 +6,7 @@ use yew_dom_attributes::svg_props::SvgProps;
 
 /// A Yew implementation of ClayButtonWithIcon. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html#icon]
-pub struct ClayButtonWithIcon {}
+pub struct ClayButtonWithIcon;
 
 /// Props for ClayButton. For details, check the docs:
 /// [https://clayui.com/docs/components/button/api.html#buttonwithicon]
@@ -41,7 +41,7 @@ impl Component for ClayButtonWithIcon {
     type Properties = ButtonWithIconProps;
 
     fn create(_ctx: &Context<Self>) -> Self {
-        Self {}
+        Self
     }
 
     fn view(&self, ctx: &Context<Self>) -> yew::Html {

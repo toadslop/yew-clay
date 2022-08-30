@@ -47,7 +47,7 @@ impl Component for ClayToastContainer {
         } = ctx.props().clone();
 
         html! {
-            <div class={classes!(class, "alert-container", "container")}>
+            <div ref={self.node_ref.clone()} class={classes!(class, "alert-container", "container")}>
                 <div class={"alert-notifications alert-notifications-fixed"}>
                     {children}
                 </div>

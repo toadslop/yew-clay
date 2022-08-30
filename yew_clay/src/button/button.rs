@@ -8,7 +8,6 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayButton. For more info about ClayButton, check the documentation:
 /// [https://clayui.com/docs/components/button.html]
 pub struct ClayButton {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -103,9 +102,8 @@ impl Component for ClayButton {
     type Message = ();
     type Properties = ClayButtonProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -119,7 +117,7 @@ impl Component for ClayButton {
         html! {
             <button
                 class={classes!(btn_classes, user_classes)}
-                ref={self.node_ref.clone()}
+                ref={&props.node_ref}
                 type={props._type.clone()} >
                 {props.children.clone()}
             </button>
@@ -128,8 +126,9 @@ impl Component for ClayButton {
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(button_props) = &ctx.props().button_html_attributes {
+            let node_ref = &ctx.props().node_ref;
             let button_props = button_props.clone();
-            button_props.inject(&self.node_ref, &mut self.listeners);
+            button_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

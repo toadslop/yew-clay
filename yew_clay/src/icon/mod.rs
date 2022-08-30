@@ -6,7 +6,6 @@ use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClayIcon.
 pub struct ClayIcon {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -35,7 +34,6 @@ impl Component for ClayIcon {
 
     fn create(ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -51,7 +49,7 @@ impl Component for ClayIcon {
             <svg
                 class={classes!(user_classes, "lexicon-icon", icon_class)}
                 key={props.symbol}
-                ref={self.node_ref.clone()}
+                ref={props.node_ref}
                 role="presentation"
             >
                 <use href={xlink_href} />
@@ -62,7 +60,8 @@ impl Component for ClayIcon {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(svg_props) = &ctx.props().svg_html_attributes {
             let svg_props = svg_props.clone();
-            svg_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            svg_props.inject(&node_ref, &mut self.listeners);
         }
     }
 }

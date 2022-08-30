@@ -15,7 +15,6 @@ use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;
 
 pub struct ClayItem {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -132,7 +131,6 @@ impl Component for ClayItem {
         };
 
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
             html,
             anchor_props,
@@ -140,23 +138,26 @@ impl Component for ClayItem {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let ClayItemProps { active, .. } = ctx.props().clone();
+        let ClayItemProps {
+            active, node_ref, ..
+        } = ctx.props().clone();
         let active_class = Self::get_active_class(active);
 
         html! {
-          <li ref={self.node_ref.clone()} class={classes!("breadcrumb-item", active_class)} >
+          <li ref={node_ref} class={classes!("breadcrumb-item", active_class)} >
             {self.html.clone()}
           </li>
         }
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
+        let node_ref = &ctx.props().node_ref;
         let anchor_props = self.anchor_props.clone();
-        anchor_props.inject(&self.node_ref, &mut self.listeners);
+        anchor_props.inject(node_ref, &mut self.listeners);
 
         if let Some(html_props) = &ctx.props().html_props {
             let html_props = html_props.clone();
-            html_props.inject(&self.node_ref, &mut self.listeners);
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

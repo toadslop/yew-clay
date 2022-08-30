@@ -8,7 +8,6 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayBadge. For more info, check the documentation:
 /// [https://clayui.com/docs/components/badge.html]
 pub struct ClayBadge {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -58,7 +57,6 @@ impl Component for ClayBadge {
 
     fn create(ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -68,6 +66,7 @@ impl Component for ClayBadge {
             class,
             display_type,
             label,
+            node_ref,
             ..
         } = ctx.props().clone();
         let display_class = Self::get_display_class(display_type);
@@ -75,7 +74,7 @@ impl Component for ClayBadge {
         html! {
             <span
                 class={classes!(class, "badge", display_class)}
-                ref={self.node_ref.clone()} >
+                ref={node_ref} >
                 {label}
             </span>
         }
@@ -84,7 +83,7 @@ impl Component for ClayBadge {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(button_props) = &ctx.props().button_html_attributes {
             let button_props = button_props.clone();
-            button_props.inject(&self.node_ref, &mut self.listeners);
+            button_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
     }
 }

@@ -43,11 +43,14 @@ impl Component for ClayAlertFooter {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let ClayAlertFooterProps {
-            class, children, ..
+            class,
+            children,
+            node_ref,
+            ..
         } = ctx.props().clone();
 
         html! {
-            <div class={classes!(class, "alert-footer")}>
+            <div ref={node_ref} class={classes!(class, "alert-footer")}>
                 {children}
             </div>
         }

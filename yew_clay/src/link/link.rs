@@ -18,7 +18,6 @@ use yew_dom_attributes::{anchor_props::AnchorProps, DomInjector};
 /// single ClayLink. However, any props defined directly on the ClayLink take precedence and will
 /// override thos set on the ClayLinkContext.
 pub struct ClayLink {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -235,7 +234,6 @@ impl Component for ClayLink {
 
     fn create(ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -307,15 +305,17 @@ impl Component for ClayLink {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some((context, _)) = ctx.link().context::<LinkContext>(Callback::noop()) {
             let context_props = context.props.clone();
-            context_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            context_props.inject(node_ref, &mut self.listeners);
         }
 
         if let Some(custom_props) = &ctx.props().anchor_props {
             let custom_props = custom_props.clone();
-            custom_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            custom_props.inject(node_ref, &mut self.listeners);
         }
 
-        if let Some(elem) = &self.node_ref.cast::<Element>() {
+        if let Some(elem) = &ctx.props().node_ref.cast::<Element>() {
             let target = elem.has_attribute("target");
             let rel = elem.has_attribute("rel");
             if target && !rel {
