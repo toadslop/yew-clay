@@ -232,7 +232,7 @@ impl Component for ClayLink {
     type Message = Msg;
     type Properties = ClayLinkProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
             listeners: HashMap::new(),
         }

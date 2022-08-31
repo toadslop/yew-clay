@@ -6,7 +6,6 @@ use yew_dom_attributes::DomInjector;
 
 /// A Yew implementation of ClaySheet.
 pub struct ClaySheet {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -43,24 +42,29 @@ impl Component for ClaySheet {
     type Message = ();
     type Properties = SheetProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
-        let tag_name = props.container_element;
-        let class = props.class;
-        let size = if props.large { Some("sheet-lg") } else { None };
+        let SheetProps {
+            container_element,
+            class,
+            node_ref,
+            children,
+            large,
+            ..
+        } = ctx.props().clone();
+        let size = if large { Some("sheet-lg") } else { None };
+        let tag_name = container_element;
 
         html! {
             <@{tag_name}
                 class={classes!(class, "sheet", "sheet-section", size)}
-                ref={self.node_ref.clone()} >
-                {props.children.clone()}
+                ref={node_ref} >
+                {children}
             </@>
         }
     }
@@ -68,7 +72,8 @@ impl Component for ClaySheet {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
             let html_props = html_props.clone();
-            html_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

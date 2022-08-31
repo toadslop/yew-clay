@@ -9,7 +9,6 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayRow. For more info about ClayRow, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>
 pub struct ClayRow {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -72,9 +71,8 @@ impl Component for ClayRow {
     type Message = ();
     type Properties = ClayRowProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -87,6 +85,7 @@ impl Component for ClayRow {
             children,
             gutters,
             justify,
+            node_ref,
             ..
         } = props;
 
@@ -96,8 +95,8 @@ impl Component for ClayRow {
         html! {
             <@{container_element}
                 class={classes!(class, Self::ROW, gutters_class, justify_class)}
-                ref={self.node_ref.clone()} >
-                {children.clone()}
+                ref={node_ref} >
+                {children}
             </@>
         }
     }
@@ -105,7 +104,8 @@ impl Component for ClayRow {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
             let html_props = html_props.clone();
-            html_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

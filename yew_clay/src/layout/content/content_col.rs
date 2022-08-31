@@ -8,7 +8,6 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayContentCol. For more info about ClayContentCol, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>
 pub struct ClayContentCol {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
     listeners: HashMap<String, EventListener>,
@@ -67,9 +66,8 @@ impl Component for ClayContentCol {
     type Message = ();
     type Properties = ClayContentColProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -83,6 +81,7 @@ impl Component for ClayContentCol {
             expand,
             shrink,
             float_end,
+            node_ref,
             ..
         } = props;
 
@@ -94,7 +93,7 @@ impl Component for ClayContentCol {
         html! {
             <@{container_element}
                 class={classes!(class, Self::AUTOFIT_COL, expand_class, gutter_class, shrink_class, float_class)}
-                ref={self.node_ref.clone()} >
+                ref={node_ref} >
                 {children.clone()}
             </@>
         }
@@ -103,7 +102,8 @@ impl Component for ClayContentCol {
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
             let html_props = html_props.clone();
-            html_props.inject(&self.node_ref, &mut self.listeners);
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

@@ -56,7 +56,7 @@ impl Component for ClayButtonGroup {
     type Message = ();
     type Properties = ButtonGroupProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
             listeners: HashMap::new(),
         }
