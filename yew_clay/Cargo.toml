@@ -43,4 +43,4 @@ full = [
     "link",
     "card"
 ]
-default = ["full"]
+# default = ["full"]

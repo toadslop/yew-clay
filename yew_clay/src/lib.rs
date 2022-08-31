@@ -1,31 +1,39 @@
+#[cfg(feature = "alert")]
 mod alert;
 #[cfg(feature = "alert")]
 pub use alert::*;
 
+#[cfg(feature = "badge")]
 mod badge;
 #[cfg(feature = "badge")]
 pub use badge::*;
 
+#[cfg(feature = "breadcrumb")]
 mod breadcrumb;
 #[cfg(feature = "breadcrumb")]
 pub use breadcrumb::*;
 
+#[cfg(feature = "button")]
 mod button;
 #[cfg(feature = "button")]
 pub use button::*;
 
+#[cfg(feature = "card")]
 mod card;
 #[cfg(feature = "card")]
 pub use card::aspect_ratio::{ContainerAspectRatioType, Props};
 
+#[cfg(feature = "icon")]
 mod icon;
 #[cfg(feature = "icon")]
 pub use icon::*;
 
+#[cfg(feature = "layout")]
 mod layout;
 #[cfg(feature = "layout")]
 pub use layout::*;
 
+#[cfg(feature = "link")]
 mod link;
 #[cfg(feature = "link")]
 pub use link::*;
@@ -46,6 +54,3 @@ trait HasBoolClass {
         }
     }
 }
-
-// TODO: Create a string pool for class names; use cfg feature any for any packages that need it
-// should optimize size somewhat
