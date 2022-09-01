@@ -100,7 +100,7 @@ impl Component for ClayCardNavigation {
             .and_then(|other_props| {
                 if other_props.has_attribute(Href::KEY) {
                     Some(html! {
-                        <ClayLink class={classes.clone()} node_ref={&node_ref}>
+                        <ClayLink class={classes.clone()} node_ref={&node_ref}> // TODO: pass the other_props down to clay link
                             {children.clone()}
                         </ClayLink>
                     })
@@ -124,6 +124,7 @@ impl Component for ClayCardNavigation {
 
     fn rendered(&mut self, ctx: &yew::Context<Self>, _first_render: bool) {
         if let Some(other_props) = &ctx.props().other_props {
+            // TODO: only inject props if its a div, not if we used clay link
             let other_props = other_props.clone();
             other_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
