@@ -5,6 +5,7 @@ pub mod aspect_ratio;
 mod body;
 mod caption;
 mod card_horizontal;
+mod card_navigation;
 mod context;
 
 pub const SPAN: &'static str = "span";
