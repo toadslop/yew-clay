@@ -1,12 +1,11 @@
-use std::collections::HashMap;
-
 use crate::{card::ClayCardContext, ClayLink};
-use domatt::attributes::anchor::Href;
-use gloo_events::EventListener;
-use web_sys::MouseEvent;
-use yew::{
-    classes, html, Callback, Children, Classes, Component, ContextProvider, NodeRef, Properties,
+use domatt::{
+    attributes::{anchor::Href, global::AriaRole},
+    events::Click,
 };
+use gloo_events::EventListener;
+use std::collections::HashMap;
+use yew::{classes, html, Children, Classes, Component, ContextProvider, NodeRef, Properties};
 use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
 
 #[derive(Debug, Properties, PartialEq, Clone)]
@@ -20,14 +19,13 @@ pub struct Props {
     #[prop_or_default]
     pub children: Children,
 
-    #[prop_or_default]
-    pub onclick: Option<Callback<MouseEvent>>,
-
+    // #[prop_or_default]
+    // pub onclick: Option<Callback<MouseEvent>>,
     #[prop_or_default]
     pub other_props: Option<GlobalProps>,
 
     #[prop_or_default]
-    node_ref: NodeRef,
+    pub node_ref: NodeRef,
 }
 
 pub struct ClayCardNavigation {
@@ -75,7 +73,6 @@ impl Component for ClayCardNavigation {
             node_ref,
             class,
             horizontal,
-            onclick,
             ..
         } = ctx.props().clone();
 
@@ -88,12 +85,12 @@ impl Component for ClayCardNavigation {
             Self::get_horizontal_class(horizontal)
         );
 
-        // TODO: redo events section so instead of user providing a key, each type of event has a key like 'onclick' or 'onhover'
-        // TODO: remove current onclick from props and instead check for onclick in other props
-        // TODO: instead of manually setting role to button, add role to other props if onclick exists
-
-        let role = if onclick.is_some() {
-            Some("button")
+        let role = if let Some(other_props) = &other_props {
+            if other_props.has_event_type(Click::KEY) {
+                Some(AriaRole::Button.as_ref()) // TODO: implement into prop value for all domatt values (cfg Yew)
+            } else {
+                None
+            }
         } else {
             None
         };
