@@ -1,7 +1,7 @@
 use super::button::ClayButton;
 use super::ClayButtonWithIcon;
 use gloo_events::EventListener;
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 use yew::virtual_dom::VChild;
 use yew::{classes, Classes, NodeRef};
 use yew::{html, html::ChildrenRenderer, Component, Context, Html, Properties};
@@ -10,10 +10,9 @@ use yew_dom_attributes::DomInjector;
 
 /// A wrapper around ClayButton.Group. Only ClayButtons may be passed as children.
 pub struct ClayButtonGroup {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for Button Group. For details, check the docs:
@@ -33,7 +32,7 @@ pub struct ButtonGroupProps {
     #[prop_or_default]
     pub node_ref: NodeRef,
     #[prop_or_default]
-    pub html_element_props: Option<Rc<GlobalProps>>,
+    pub html_element_props: Option<GlobalProps>,
 }
 
 #[derive(Clone, derive_more::From, PartialEq)]
@@ -57,20 +56,17 @@ impl Component for ClayButtonGroup {
     type Message = ();
     type Properties = ButtonGroupProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_element_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 
@@ -88,6 +84,7 @@ impl Component for ClayButtonGroup {
 
         html! {
             <div
+                ref={&ctx.props().node_ref}
                 class={classes!(user_classes, btn_group_class)}
                 role={props.role.clone()}
             >

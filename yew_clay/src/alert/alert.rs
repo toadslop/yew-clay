@@ -10,17 +10,17 @@ use crate::alert::utils::sub_components::ConditionalContainer;
 use crate::layout::{ClayContentCol, ClayContentRow, ClayContentSection};
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use std::rc::Rc;
 use web_sys::MouseEvent;
 use yew::{classes, html, Callback, Component, Context, Html, NodeRef};
 use yew_dom_attributes::DomInjector;
+
 /// A Yew implementation of ClayAlert. For more info about ClayAlert, check the documentation:
 /// <https://clayui.com/docs/components/alert.html>
 pub struct ClayAlert {
     node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this component. They will be automatically
     /// removed when the component is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
     timer_id: Option<i32>,
     pause_timer: Option<Callback<MouseEvent>>,
     start_timer: Option<Callback<MouseEvent>>,
@@ -190,11 +190,8 @@ impl Component for ClayAlert {
         }
 
         if let Some(html_props) = &ctx.props().html_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            html_props.inject(&self.node_ref, &mut self.listeners);
         }
     }
 

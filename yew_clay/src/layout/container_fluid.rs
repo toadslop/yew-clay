@@ -2,7 +2,6 @@ use super::container::ClayContainer;
 use super::Sizing;
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use std::rc::Rc;
 use yew::{html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
 use yew_dom_attributes::DomInjector;
@@ -10,10 +9,9 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayContainer. For more info about ClayContainer, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>
 pub struct ClayContainerFluid {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayContainer. For details, check the docs:
@@ -48,27 +46,30 @@ pub struct ClayContainerFluidProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<GlobalProps>>,
+    pub html_props: Option<GlobalProps>,
 }
 
 impl Component for ClayContainerFluid {
     type Message = ();
     type Properties = ClayContainerFluidProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
-        let class = props.class;
-        let container_element = props.container_element;
-        let form_size = props.form_size;
-        let view = props.view;
-        let size = props.size;
+        let ClayContainerFluidProps {
+            container_element,
+            class,
+            node_ref,
+            children,
+            form_size,
+            view,
+            size,
+            ..
+        } = ctx.props().clone();
 
         html! {
             <ClayContainer
@@ -78,19 +79,17 @@ impl Component for ClayContainerFluid {
                 view={view}
                 fluid={true}
                 fluid_size={size}
-                ref={self.node_ref.clone()} >
-                {props.children.clone()}
+                ref={node_ref} >
+                {children}
             </ClayContainer>
         }
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

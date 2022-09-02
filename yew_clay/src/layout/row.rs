@@ -1,7 +1,6 @@
 use crate::HasBoolClass;
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use std::rc::Rc;
 use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
@@ -10,10 +9,9 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayRow. For more info about ClayRow, check the documentation:
 /// <https://clayui.com/docs/components/layout.html>
 pub struct ClayRow {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayRow. For details, check the docs:
@@ -44,7 +42,7 @@ pub struct ClayRowProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub html_props: Option<Rc<GlobalProps>>,
+    pub html_props: Option<GlobalProps>,
 }
 
 impl ClayRow {
@@ -73,9 +71,8 @@ impl Component for ClayRow {
     type Message = ();
     type Properties = ClayRowProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -88,6 +85,7 @@ impl Component for ClayRow {
             children,
             gutters,
             justify,
+            node_ref,
             ..
         } = props;
 
@@ -97,19 +95,17 @@ impl Component for ClayRow {
         html! {
             <@{container_element}
                 class={classes!(class, Self::ROW, gutters_class, justify_class)}
-                ref={self.node_ref.clone()} >
-                {children.clone()}
+                ref={node_ref} >
+                {children}
             </@>
         }
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(html_props) = &ctx.props().html_props {
-            let mut html_props = html_props.clone();
-            Rc::make_mut(&mut html_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = html_props.get_props_update_callback() {
-                cb.emit(html_props.clone());
-            }
+            let html_props = html_props.clone();
+            let node_ref = &ctx.props().node_ref;
+            html_props.inject(node_ref, &mut self.listeners);
         }
     }
 }

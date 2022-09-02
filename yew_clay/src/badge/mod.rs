@@ -1,6 +1,5 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use std::rc::Rc;
 use strum::AsRefStr;
 use yew::{classes, html, Children, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::global_props::GlobalProps;
@@ -9,10 +8,9 @@ use yew_dom_attributes::DomInjector;
 /// A Yew implementation of ClayBadge. For more info, check the documentation:
 /// [https://clayui.com/docs/components/badge.html]
 pub struct ClayBadge {
-    node_ref: NodeRef,
     /// This vec holds all the EventListeners defined for this button. They will be automatically
     /// removed when the button is destroyed.
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 /// Props for ClayButton. For details, check the docs:
@@ -38,7 +36,7 @@ pub struct ClayBadgeProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub button_html_attributes: Option<Rc<GlobalProps>>,
+    pub button_html_attributes: Option<GlobalProps>,
 }
 
 impl ClayBadge {
@@ -57,9 +55,8 @@ impl Component for ClayBadge {
     type Message = ();
     type Properties = ClayBadgeProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            node_ref: ctx.props().node_ref.clone(),
             listeners: HashMap::new(),
         }
     }
@@ -69,6 +66,7 @@ impl Component for ClayBadge {
             class,
             display_type,
             label,
+            node_ref,
             ..
         } = ctx.props().clone();
         let display_class = Self::get_display_class(display_type);
@@ -76,7 +74,7 @@ impl Component for ClayBadge {
         html! {
             <span
                 class={classes!(class, "badge", display_class)}
-                ref={self.node_ref.clone()} >
+                ref={node_ref} >
                 {label}
             </span>
         }
@@ -84,11 +82,8 @@ impl Component for ClayBadge {
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
         if let Some(button_props) = &ctx.props().button_html_attributes {
-            let mut button_props = button_props.clone();
-            Rc::make_mut(&mut button_props).inject(&self.node_ref, &mut self.listeners);
-            if let Some(cb) = button_props.get_props_update_callback() {
-                cb.emit(button_props.clone());
-            }
+            let button_props = button_props.clone();
+            button_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
     }
 }

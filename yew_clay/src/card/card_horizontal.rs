@@ -1,6 +1,6 @@
 use super::context::ClayCardContext;
 use gloo_events::EventListener;
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 use yew::{
     classes, html, Children, Classes, Component, ContextProvider, Html, NodeRef, Properties,
 };
@@ -9,13 +9,15 @@ use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
 #[derive(Properties, PartialEq, Clone)]
 pub struct Props {
     /// Flag that indicates if `active` class is applied
+    #[prop_or_default]
     active: bool,
 
     /// Flag that indicates if the card can be selectable.
+    #[prop_or_default]
     selectable: bool,
 
     #[prop_or_default]
-    other_props: Option<Rc<GlobalProps>>,
+    other_props: Option<GlobalProps>,
 
     #[prop_or_default]
     node_ref: NodeRef,
@@ -28,7 +30,7 @@ pub struct Props {
 }
 
 pub struct ClayCardHorizontalBody {
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
 }
 
 impl Component for ClayCardHorizontalBody {
@@ -53,17 +55,14 @@ impl Component for ClayCardHorizontalBody {
 
     fn rendered(&mut self, ctx: &yew::Context<Self>, _first_render: bool) {
         if let Some(other_props) = &ctx.props().other_props {
-            let mut other_props = other_props.clone();
-            Rc::make_mut(&mut other_props).inject(&ctx.props().node_ref, &mut self.listeners);
-            if let Some(cb) = other_props.get_props_update_callback() {
-                cb.emit(other_props.clone());
-            }
+            let other_props = other_props.clone();
+            other_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
     }
 }
 
 pub struct ClayCardHorizontal {
-    listeners: HashMap<String, Rc<EventListener>>,
+    listeners: HashMap<String, EventListener>,
     context: ClayCardContext,
 }
 
@@ -117,7 +116,7 @@ impl Component for ClayCardHorizontal {
 
         let selectable_class = Self::get_selectable_class(selectable);
         let active_class = Self::get_active_class(active);
-        // <ContextProvider<ClayCardContext> context={self.context.clone()}></ContextProvider<ClayCardContext>>
+
         html! {
             <ContextProvider<ClayCardContext> context={self.context.clone()}>
                 <div class={classes!(class, selectable_class, Self::CARD_TYPE_DIRECTORY, active_class)}>
@@ -129,11 +128,8 @@ impl Component for ClayCardHorizontal {
 
     fn rendered(&mut self, ctx: &yew::Context<Self>, _first_render: bool) {
         if let Some(other_props) = &ctx.props().other_props {
-            let mut other_props = other_props.clone();
-            Rc::make_mut(&mut other_props).inject(&ctx.props().node_ref, &mut self.listeners);
-            if let Some(cb) = other_props.get_props_update_callback() {
-                cb.emit(other_props.clone());
-            }
+            let other_props = other_props.clone();
+            other_props.inject(&ctx.props().node_ref, &mut self.listeners);
         }
     }
 }
