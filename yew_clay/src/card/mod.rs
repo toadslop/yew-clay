@@ -5,12 +5,13 @@ pub mod aspect_ratio;
 mod body;
 mod caption;
 mod card_horizontal;
+mod card_navigation;
 mod context;
 
-pub const SPAN: &'static str = "span";
-pub const DIV: &'static str = "div";
-
 trait Interactive: Component {
+    const SPAN: &'static str = "span";
+    const DIV: &'static str = "div";
+
     fn get_interactive(ctx: &Context<Self>) -> bool {
         if let Some((context, _)) = ctx.link().context::<ClayCardContext>(Callback::noop()) {
             context.interactive
@@ -21,9 +22,9 @@ trait Interactive: Component {
 
     fn get_tag_name(interactive: bool) -> &'static str {
         if interactive {
-            SPAN
+            Self::SPAN
         } else {
-            DIV
+            Self::DIV
         }
     }
 }

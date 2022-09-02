@@ -119,11 +119,11 @@ impl Component for ClayCardHorizontal {
         let active_class = Self::get_active_class(active);
         // <ContextProvider<ClayCardContext> context={self.context.clone()}></ContextProvider<ClayCardContext>>
         html! {
-         <ContextProvider<ClayCardContext> context={self.context.clone()}>
-          <div class={classes!(class, selectable_class, Self::CARD_TYPE_DIRECTORY, active_class)}>
-            {children}
-          </div>
-         </ContextProvider<ClayCardContext>>
+            <ContextProvider<ClayCardContext> context={self.context.clone()}>
+                <div class={classes!(class, selectable_class, Self::CARD_TYPE_DIRECTORY, active_class)}>
+                    {children}
+                </div>
+            </ContextProvider<ClayCardContext>>
         }
     }
 
