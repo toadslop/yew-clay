@@ -631,6 +631,7 @@ name = "yew-dom-attributes"
 version = "0.1.0"
 dependencies = [
  "domatt",
+ "gloo-console",
  "gloo-events",
  "strum",
  "wasm-bindgen",
