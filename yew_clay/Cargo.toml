@@ -32,7 +32,7 @@ alert = ["strum/derive", "web-sys/Element"]
 badge = ["strum/derive"]
 breadcrumb = ["link","domatt/anchor","domatt/global","button"]
 link = ["web-sys/Element"]
-card = []
+card = ["link"]
 full = [
     "button",
     "icon",
