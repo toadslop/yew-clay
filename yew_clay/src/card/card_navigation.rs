@@ -5,8 +5,10 @@ use domatt::{
 };
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use yew::{classes, html, Children, Classes, Component, ContextProvider, NodeRef, Properties};
-use yew_dom_attributes::{global_props::GlobalProps, DomInjector};
+use yew::{
+    classes, html, Children, Classes, Component, ContextProvider, Html, NodeRef, Properties,
+};
+use yew_dom_attributes::{anchor_props::AnchorProps, global_props::GlobalProps, DomInjector};
 
 #[derive(Debug, Properties, PartialEq, Clone)]
 pub struct Props {
@@ -19,8 +21,6 @@ pub struct Props {
     #[prop_or_default]
     pub children: Children,
 
-    // #[prop_or_default]
-    // pub onclick: Option<Callback<MouseEvent>>,
     #[prop_or_default]
     pub other_props: Option<GlobalProps>,
 
@@ -46,6 +46,44 @@ impl ClayCardNavigation {
             Self::TEMPLATE_CARD_HORIZONTAL
         } else {
             Self::TEMPLATE_CARD
+        }
+    }
+
+    fn get_content(
+        other_props: Option<GlobalProps>,
+        classes: Classes,
+        node_ref: NodeRef,
+        children: Children,
+        role: Option<String>,
+    ) -> Html {
+        other_props
+            .and_then(|other_props| {
+                if other_props.has_attribute(Href::KEY) {
+                    Some(html! {
+                        <ClayLink class={classes.clone()} node_ref={&node_ref} anchor_props={AnchorProps::from(other_props)}>
+                            {children.clone()}
+                        </ClayLink>
+                    })
+                } else {
+                    None
+                }
+            })
+            .or_else(|| {
+                Some(html! {
+                    <div class={classes.clone()} ref={&node_ref} role={role}>{children}</div>
+                })
+            }).unwrap()
+    }
+
+    fn get_role(other_props: &Option<GlobalProps>) -> Option<String> {
+        if let Some(other_props) = other_props {
+            if other_props.has_event_type(Click::KEY) {
+                Some(AriaRole::Button.as_ref().to_string()) // TODO: implement into prop value for all domatt values (cfg Yew)
+            } else {
+                None
+            }
+        } else {
+            None
         }
     }
 }
@@ -85,35 +123,9 @@ impl Component for ClayCardNavigation {
             Self::get_horizontal_class(horizontal)
         );
 
-        let role = if let Some(other_props) = &other_props {
-            if other_props.has_event_type(Click::KEY) {
-                Some(AriaRole::Button.as_ref()) // TODO: implement into prop value for all domatt values (cfg Yew)
-            } else {
-                None
-            }
-        } else {
-            None
-        };
+        let role = Self::get_role(&other_props);
 
-        // TODO: move this to a separate function
-        let content = other_props
-            .and_then(|other_props| {
-                if other_props.has_attribute(Href::KEY) {
-                    Some(html! {
-                        <ClayLink class={classes.clone()} node_ref={&node_ref}> // TODO: pass the other_props down to clay link
-                            {children.clone()}
-                        </ClayLink>
-                    })
-                } else {
-                    None
-                }
-            })
-            .or_else(|| {
-                Some(html! {
-                    <div class={classes.clone()} ref={&node_ref} role={role}>{children}</div>
-                })
-            })
-            .unwrap();
+        let content = Self::get_content(other_props, classes, node_ref, children, role);
 
         html! {
             <ContextProvider<ClayCardContext> context={self.context.to_owned()}>
@@ -124,9 +136,10 @@ impl Component for ClayCardNavigation {
 
     fn rendered(&mut self, ctx: &yew::Context<Self>, _first_render: bool) {
         if let Some(other_props) = &ctx.props().other_props {
-            // TODO: only inject props if its a div, not if we used clay link
-            let other_props = other_props.clone();
-            other_props.inject(&ctx.props().node_ref, &mut self.listeners);
+            if !other_props.has_attribute(Href::KEY) {
+                let other_props = other_props.clone();
+                other_props.inject(&ctx.props().node_ref, &mut self.listeners);
+            }
         }
     }
 }
