@@ -38,6 +38,11 @@ mod link;
 #[cfg(feature = "link")]
 pub use link::*;
 
+#[cfg(feature = "date-picker")]
+mod date_picker;
+#[cfg(feature = "date-picker")]
+pub use date_picker::*;
+
 trait HasBoolClass {
     fn get_bool_class(&self, boolean: Option<bool>, class_name: &'static str) -> Option<String> {
         if let Some(boolean) = boolean {
