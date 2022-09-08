@@ -1,6 +1,6 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
-use yew::{classes, html, Classes, Component, Context, Html, NodeRef, Properties};
+use yew::{classes, html, Callback, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::svg_props::SvgProps;
 use yew_dom_attributes::DomInjector;
 
@@ -17,8 +17,9 @@ pub struct ClayIcon {
 pub struct IconProps {
     #[prop_or_default]
     pub class: Classes,
+    /// Path to the location of the spritemap resource.
     #[prop_or_default]
-    pub spritemap: &'static str,
+    pub spritemap: Option<&'static str>, // TODO: consider switching this type to URI https://docs.rs/http/latest/http/uri/struct.Uri.html
     #[prop_or_default]
     pub symbol: String,
     #[prop_or_default]
@@ -39,17 +40,33 @@ impl Component for ClayIcon {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let props = ctx.props().clone();
-        let user_classes = props.class;
-        let icon_class = format!("lexicon-icon-{}", props.symbol);
+        let IconProps {
+            class,
+            symbol,
+            spritemap,
+            node_ref,
+            ..
+        } = ctx.props().clone();
+        let user_classes = class;
+        let icon_class = format!("lexicon-icon-{}", symbol);
 
-        let xlink_href = format!("{}#{}", props.spritemap, props.symbol);
+        let spritemap_val = if let Some(spritemap) = spritemap {
+            spritemap
+        } else {
+            let (spritemap, _) = ctx
+                .link()
+                .context::<ClayIconSpriteContext>(Callback::noop())
+                .expect("either a ClayIconSpritContext to be set or the spritemap prop to be Some");
+            spritemap.0
+        };
+
+        let xlink_href = format!("{}#{}", spritemap_val, symbol);
 
         html! {
             <svg
                 class={classes!(user_classes, "lexicon-icon", icon_class)}
-                key={props.symbol}
-                ref={props.node_ref}
+                key={symbol}
+                ref={node_ref}
                 role="presentation"
             >
                 <use href={xlink_href} />
@@ -65,3 +82,6 @@ impl Component for ClayIcon {
         }
     }
 }
+
+#[derive(Debug, Clone, PartialEq)]
+struct ClayIconSpriteContext(&'static str);
