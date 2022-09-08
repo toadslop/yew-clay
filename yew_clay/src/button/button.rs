@@ -59,7 +59,7 @@ pub struct ClayButtonProps {
 
     /// A catchall prop to pass down anything not specified here to the underlying component.
     #[prop_or_default]
-    pub button_html_attributes: Option<ButtonProps>,
+    pub button_props: Option<ButtonProps>,
 }
 
 impl ClayButton {
@@ -125,7 +125,7 @@ impl Component for ClayButton {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, _first_render: bool) {
-        if let Some(button_props) = &ctx.props().button_html_attributes {
+        if let Some(button_props) = &ctx.props().button_props {
             let node_ref = &ctx.props().node_ref;
             let button_props = button_props.clone();
             button_props.inject(node_ref, &mut self.listeners);
