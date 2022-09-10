@@ -1,0 +1,13 @@
+pub const BACKSPACE: &'static str = "Backspace";
+pub const DELETE: &'static str = "Delete";
+pub const ARROW_DOWN: &'static str = "ArrowDown";
+pub const END: &'static str = "End";
+pub const ESCAPE: &'static str = "Escape";
+pub const F2: &'static str = "F2";
+pub const HOME: &'static str = "Home";
+pub const ARROW_LEFT: &'static str = "ArrowLeft";
+pub const R: &'static str = "R";
+pub const ARROW_RIGHT: &'static str = "ArrowRight";
+pub const SPACEBAR: &'static str = " ";
+pub const TAB: &'static str = "Tab";
+pub const ARROW_UP: &'static str = "ArrowUp";
