@@ -1,0 +1,13 @@
+lockfileVersion: 5.4
+
+specifiers:
+  dom-align: ^1.12.3
+
+dependencies:
+  dom-align: 1.12.3
+
+packages:
+
+  /dom-align/1.12.3:
+    resolution: {integrity: sha512-Gj9hZN3a07cbR6zviMUBOMPdWxYhbMI+x+WS0NAIu2zFZmbK8ys9R79g+iG9qLnlCwpFoaB+fKy8Pdv470GsPA==}
+    dev: false
