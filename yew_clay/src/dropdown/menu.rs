@@ -1,3 +1,5 @@
+use yew::{NodeRef, Properties};
+
 // /**
 //  * SPDX-FileCopyrightText: © 2019 Liferay, Inc. <https://liferay.com>
 //  * SPDX-License-Identifier: BSD-3-Clause
@@ -86,7 +88,22 @@
 // 	trtl: LEFT_OFFSET,
 // };
 
-use yew::{NodeRef, Properties};
+#[derive(Debug, Default, Clone, PartialEq)]
+pub enum AlignmentPosition {
+    BottomCenter,
+    #[default]
+    BottomLeft,
+    BottomRight,
+    LeftBottom,
+    Leftcenter,
+    LeftTop,
+    RightBottom,
+    RightCenter,
+    RightTop,
+    TopCenter,
+    TopLeft,
+    TopRight,
+}
 
 #[derive(Debug, Properties, Clone, PartialEq)]
 struct Props {
@@ -103,7 +120,17 @@ struct Props {
 
     /// Flag to suggest or not the best region to align menu element.
     #[prop_or_default]
-    auto_best_align: bool,
+    // auto_best_align: bool,
+
+    /// Default position of menu element. Values come from above.
+    ///
+    /// Defaults to BottomLeft
+    #[prop_or_default]
+    alignment_position: AlignmentPosition,
+
+    /// Flag to indicate if clicking outside of the menu should automatically close it.
+    #[prop_or_default]
+    close_on_click_outside: bool,
 }
 
 // export interface IProps extends React.HTMLAttributes<HTMLDivElement> {

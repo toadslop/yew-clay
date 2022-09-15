@@ -1,60 +1,83 @@
-use js_sys::{Array, Object, Reflect};
-use wasm_bindgen::{prelude::*, JsCast};
-use web_sys::{Element, Node};
+use serde::{Deserialize, Serialize};
+use std::convert::TryFrom;
+use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
+use web_sys::Element;
 
-#[wasm_bindgen(module = "/node_modules/dom-align/dist-web/index.js")]
+#[wasm_bindgen(module = "dom_align/index.js")]
 extern "C" {
     #[wasm_bindgen(js_name = doAlign)]
-    fn do_align(el: Element, node_ref: Node) -> Object;
+    fn do_align(source_node: &Element, target_node: &Element, config: JsValue) -> JsValue;
 }
 
-// import domAlign from 'dom-align';
-
-// return {
-//   points: points,
-//   offset: offset,
-//   targetOffset: targetOffset,
-//   overflow: newOverflowCfg
-// }
-
-#[derive(Debug)]
-enum Point {
+#[derive(Debug, Deserialize, Serialize)]
+pub enum Point {
     TopRight,
     ButtomLeft,
 }
 
-#[derive(Debug)]
-struct AlignBase {
+#[derive(Debug, Deserialize, Serialize, Default)]
+pub struct AlignConfig {
     offset: Option<[u8; 2]>,
     overflow: Option<Overflow>,
     points: Option<[Point; 2]>,
     target_offset: Option<[Point; 2]>,
+    use_css_right: bool,
 }
 
-impl From<Object> for AlignBase {
-    fn from(js_object: Object) -> Self {
-        js_object.into_serde();
-        Self {
-            offset: todo!(),
-            overflow: todo!(),
-            points: todo!(),
-            target_offset: todo!(),
-        }
+impl AlignConfig {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn set_offset(&mut self, offset: [u8; 2]) {
+        self.offset = Some(offset)
+    }
+
+    pub fn set_overflow(&mut self, overflow: Overflow) {
+        self.overflow = Some(overflow)
+    }
+
+    pub fn set_points(&mut self, points: [Point; 2]) {
+        self.points = Some(points)
+    }
+
+    pub fn set_target_offset(&mut self, points: [Point; 2]) {
+        self.target_offset = Some(points)
+    }
+
+    pub fn set_use_css_right(&mut self, use_css_right: bool) {
+        self.use_css_right = use_css_right
+    }
+}
+
+impl TryFrom<JsValue> for AlignConfig {
+    type Error = serde_wasm_bindgen::Error;
+
+    fn try_from(value: JsValue) -> Result<Self, Self::Error> {
+        let value: Self = serde_wasm_bindgen::from_value(value)?;
+
+        Ok(value)
+    }
+}
+
+impl From<AlignConfig> for JsValue {
+    fn from(_: AlignConfig) -> Self {
+        todo!()
     }
 }
 
 #[derive(Debug)]
-struct AlignProps {
+pub struct AlignProps<'a> {
     offset: Option<[u8; 2]>,
     overflow: Option<Overflow>,
     points: Option<[Point; 2]>,
     target_offset: Option<[Point; 2]>,
-    source_element: Element,
-    target_element: Element,
+    source_element: &'a Element,
+    target_element: &'a Element,
 }
 
-#[derive(Debug, Default)]
-struct Overflow {
+#[derive(Debug, Default, Deserialize, Serialize)]
+pub struct Overflow {
     adjust_x: bool,
     adjust_y: bool,
     always_by_viewport: bool,
@@ -76,31 +99,26 @@ fn is_rtl(element: &Element) -> bool {
     }
 }
 
-// type AlignBase = {
-// 	offset?: readonly [number, number];
-// 	overflow?: {adjustX: boolean; adjustY: boolean; alwaysByViewport?: boolean};
-// 	points?: readonly [string, string];
-// 	targetOffset?: readonly [string, string];
-// };
+pub fn align_dom<'a>(
+    source_element: &'a Element,
+    target_element: &'a Element,
+    mut config: AlignConfig,
+) -> AlignProps<'a> {
+    config.set_use_css_right(is_rtl(source_element));
 
-// type AlignProps<T, K> = AlignBase & {
-// 	sourceElement: K;
-// 	targetElement: T;
-// };
+    let config =
+        serde_wasm_bindgen::to_value(&config).expect("config to be convertable to js value.");
 
-// function isRtl<T extends HTMLElement>(element: T) {
-// 	return window.getComputedStyle(element).direction === 'rtl';
-// }
+    let result = do_align(source_element, target_element, config);
 
-fn do_align(source_element: Element, target_element: Element) -> AlignProps {}
+    let as_rust = AlignConfig::try_from(result).expect("it to be possible to convert the result.");
 
-// export function doAlign<T extends HTMLElement, K extends HTMLElement>({
-// 	sourceElement,
-// 	targetElement,
-// 	...config
-// }: AlignProps<T, K>): Required<AlignBase> {
-// 	return domAlign(sourceElement, targetElement, {
-// 		...config,
-// 		useCssRight: isRtl(sourceElement),
-// 	});
-// }
+    AlignProps {
+        offset: as_rust.offset,
+        overflow: as_rust.overflow,
+        points: as_rust.points,
+        target_offset: as_rust.target_offset,
+        source_element,
+        target_element,
+    }
+}

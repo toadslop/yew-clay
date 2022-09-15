@@ -1,19 +1,29 @@
 use lru::LruCache;
-use std::{collections::HashMap, future::Future};
+use std::{any::Any, collections::HashMap, fmt::Debug, future::Future, num::NonZeroUsize};
 
-pub enum ValueOption<T> {
-    Value(T),
-    FutureValue(Box<dyn Future<Output = T>>),
+pub enum ValueOption {
+    Value(Box<dyn Any>),
+    FutureValue(Box<dyn Future<Output = Box<dyn Any>>>),
 }
 
-pub struct DataClient<T> {
-    cache: LruCache<&'static str, T>,
-    current_futures: HashMap<&'static str, Box<dyn Future<Output = T>>>,
+pub struct DataClient {
+    cache: LruCache<&'static str, Box<dyn Any>>,
+    current_futures: HashMap<&'static str, Box<dyn Future<Output = Box<dyn Any>>>>,
     cursors: HashMap<&'static str, String>,
 }
 
-impl<T> DataClient<T> {
-    pub fn new(storage_max_size: usize) -> Self {
+impl Debug for DataClient {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("DataClient")
+            .field("cache", &self.cache)
+            .field("current_futures", &self.current_futures.keys())
+            .field("cursors", &self.cursors)
+            .finish()
+    }
+}
+
+impl DataClient {
+    pub fn new(storage_max_size: NonZeroUsize) -> Self {
         Self {
             cache: LruCache::new(storage_max_size),
             current_futures: HashMap::new(),
@@ -21,11 +31,11 @@ impl<T> DataClient<T> {
         }
     }
 
-    pub fn read(&mut self, key: &'static str) -> Option<&T> {
+    pub fn read(&mut self, key: &'static str) -> Option<&Box<dyn Any>> {
         self.cache.get(&key)
     }
 
-    pub fn update(&mut self, key: &'static str, value: ValueOption<T>) {
+    pub fn update(&mut self, key: &'static str, value: ValueOption) {
         match value {
             ValueOption::Value(value) => {
                 self.cache.push(key, value);
@@ -46,5 +56,13 @@ impl<T> DataClient<T> {
 
     pub fn set_cursor(&mut self, key: &'static str, value: String) -> Option<String> {
         self.cursors.insert(key, value)
+    }
+
+    pub fn resize(&mut self, new_max_size: NonZeroUsize) {
+        self.cache.resize(new_max_size)
+    }
+
+    pub fn max_size(&self) -> NonZeroUsize {
+        self.cache.cap()
     }
 }

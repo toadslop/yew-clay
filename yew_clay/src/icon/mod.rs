@@ -1,5 +1,6 @@
 use gloo_events::EventListener;
 use std::collections::HashMap;
+use yew::virtual_dom::AttrValue;
 use yew::{classes, html, Callback, Classes, Component, Context, Html, NodeRef, Properties};
 use yew_dom_attributes::svg_props::SvgProps;
 use yew_dom_attributes::DomInjector;
@@ -19,7 +20,7 @@ pub struct IconProps {
     pub class: Classes,
     /// Path to the location of the spritemap resource.
     #[prop_or_default]
-    pub spritemap: Option<&'static str>, // TODO: consider switching this type to URI https://docs.rs/http/latest/http/uri/struct.Uri.html
+    pub spritemap: Option<AttrValue>, // TODO: consider switching this type to URI https://docs.rs/http/latest/http/uri/struct.Uri.html
     #[prop_or_default]
     pub symbol: String,
     #[prop_or_default]
@@ -84,4 +85,10 @@ impl Component for ClayIcon {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-struct ClayIconSpriteContext(&'static str);
+pub struct ClayIconSpriteContext(AttrValue);
+
+impl ClayIconSpriteContext {
+    pub fn new(spritemap: AttrValue) -> Self {
+        Self(spritemap)
+    }
+}
